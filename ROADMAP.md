@@ -115,7 +115,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Soak test: detect memory, connection and consumer-lag drift; a runbook for what to watch
 
 ## Phase 5 — Test environments at scale (about 2 weeks)
-- [ ] Playwright e2e against the full compose stack
+- [ ] BDD e2e against the full compose stack: Gherkin features from the spec scenarios, playwright-bdd (web) and pytest-bdd (API and event flows), `@smoke` and `@regression` suites in CircleCI, with the HTML report as living documentation
 - [ ] Disposable environment for each CircleCI pipeline: bring the stack up → test → tear it down
 - [ ] kind cluster, Kubernetes manifests, then Helm charts
 - [ ] Image scanning with Trivy, SBOMs, and test splitting in CircleCI
