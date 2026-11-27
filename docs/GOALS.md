@@ -8,7 +8,9 @@
 - **AI engineering**: agents, tool calling, MCP, structured output, evals, agent testing, AI for monitoring, and AI coding agents.
 - **Kafka and event-driven architecture.**
 
-## 2. Be the best candidate for the target job
+## 2. Be the best candidate for the target jobs
+Prepare for both **full stack developer** and **QA / SDET (test automation)** roles. The primary posting is below; QA/SDET postings that ask for Kafka and event-driven testing are a second target. Interview prep for both lives in `docs/interview/`.
+
 Target: **Full Stack Developer at Foci Solutions Inc.**, a remote software engineering consultancy (https://foci.bamboohr.com/careers/18).
 
 | What the job asks for | Where this lab covers it |
@@ -36,8 +38,8 @@ Before proposing a lab, the mentor researches current industry standards and bes
 ## 7. Performance and non-functional quality
 Practice load, stress, spike, soak and breakpoint testing, plus resilience, web performance and accessibility testing, on the platform itself. NFRs are written as spec scenarios with numbers, derived from SLOs, and CI is gated on them. The tools are free and widely used: k6 (default), Locust (Python and LLM paths), Kafka perf tools, Pyroscope and py-spy (profiling), Toxiproxy and Chaos Mesh (fault injection), Lighthouse CI (web vitals) and axe-core (WCAG 2.2 AA). AI works on top: the official k6 MCP server and skills for Claude Code and Codex, and a perf-analyst agent that explains regressions. Heavy load runs only against local or disposable environments, never against free-tier hosts.
 
-## 8. Master testing distributed, event-driven systems, and explaining it
-A core skill to learn and be able to talk about with confidence. Practise every failure mode on this platform: duplicate, delayed, missing, out-of-order and poison events; retries and backoff; idempotency; DLQ and redrive; consumer rebalances; outbox and sagas; eventual-consistency assertions without sleeps; downstream validation and reconciliation; trace-based tests with correlation IDs. Connect it to past experience (Paysafe asynchronous microservices on MapR, whose event store is Kafka-API compatible), and build answers with evidence in `docs/interview/`.
+## 8. Master testing distributed, event-driven systems with Kafka, and explaining it
+A core skill to learn and to talk about with confidence: *"How would you approach testing a distributed, event-driven system? Discuss eventual consistency, duplicate events, retries, idempotency, downstream validation and observability."* Kafka is the backbone. Learn it in depth: partitions and keys, producer idempotence and acks, delivery semantics, transactions and exactly-once, consumer groups and rebalances (including the Kafka 4.x protocol), offsets and replay, retry topics and DLQ, Schema Registry compatibility, compaction, lag, and share groups. Practise every failure mode on this platform: duplicate, delayed, missing, out-of-order and poison events; retries; idempotency; outbox and sagas; eventual-consistency assertions without sleeps; downstream validation and reconciliation; trace-based tests with correlation IDs. Show the concepts transfer to other brokers (SQS in Phase 2). Build evidence-backed answers in `docs/interview/`.
 
 ## 9. AI agents wherever they add value
 The enricher agent, the ops-agent (AI SRE), test-generation and exploratory e2e agents, LLM-as-judge evals, a CircleCI build-failure agent, PR review, and coding agents. You still write the core code yourself; agents are what you build, test, monitor and work with.
