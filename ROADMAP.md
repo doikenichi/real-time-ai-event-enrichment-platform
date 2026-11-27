@@ -6,7 +6,7 @@ Every weekday has **3 challenges** (A, B, C), each taking 10–20 minutes, at mo
 - **B — Full stack:** TypeScript gateway and the Next.js dashboard, end to end
 - **C — Cloud, DevOps and AI agents:** infrastructure, CI/CD, observability, coding agents, agent testing
 
-Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Security is secure-by-default from day 1 (skill `security-hardening`). Distributed-systems testing is a core thread (skill `distributed-event-testing`): every event-flow milestone includes its failure-mode tests. Non-functional quality (performance, resilience, accessibility) is tested from Phase 1 onward (skill `performance-and-nfr-testing`). Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
+Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Each challenge links to a book chapter from [docs/READING.md](docs/READING.md) (skill `reading-companion`). Security is secure-by-default from day 1 (skill `security-hardening`). Distributed-systems testing is a core thread (skill `distributed-event-testing`): every event-flow milestone includes its failure-mode tests. Non-functional quality (performance, resilience, accessibility) is tested from Phase 1 onward (skill `performance-and-nfr-testing`). Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
 
 ## Phase 0 — Foundations (about 2 weeks)
 - [ ] Repo security baseline: a ruleset on `main` (PRs only, no force pushes or deletion, conversation resolution), squash merge only, delete branches after merge, disable unused features
@@ -64,6 +64,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Exactly-once inside Kafka: transactional read-process-write with `read_committed` consumers; a test that aborted transactions are never visible, and why external side effects still need idempotency
 - [ ] Compacted topic for latest-state-per-key (for example enrichment rules), with tombstones and a rebuild test
 - [ ] Same failure modes on SQS (through the emulators): visibility timeout, redrive policy, FIFO deduplication, to show the concepts transfer across brokers
+- [ ] Streams as the source of truth (DDIA ch. 12–13): rebuild a derived view from the Kafka log, with a replay test
 - [ ] Saga across services, with compensation for partial failures, and tests for each failure step
 
 ## Phase 3 — The enricher agent (about 3 weeks)
@@ -73,6 +74,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] An MCP server exposing platform tools, with its own contract tests
 - [ ] Agent testing pyramid: tool unit tests → scripted LLM → record/replay → trajectories → evals → red-team → budgets
 - [ ] LLM path load test with Locust: concurrency limits, rate-limit handling and backoff, token and cost budget under load (recorded provider plus a short live run)
+- [ ] Baseline before LLM (DMLS ch. 6): a cheap classical classifier (scikit-learn) for event category; compare cost and quality with the LLM, then a cascade that tries cheap first and escalates
 - [ ] Eval suite (promptfoo or DeepEval) with a baseline gate in CircleCI
 - [ ] Langfuse (self-hosted) traces, datasets and scores
 - [ ] Prompt-injection guardrails for event payloads
@@ -90,6 +92,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Distributed-bug metrics and alerts: lag, DLQ rate, retries, duplicates detected, reconciliation mismatches; a runbook for following one id across logs and traces
 - [ ] Load testing with observability: average-load and spike tests (open arrival-rate model), k6 metrics streamed to Prometheus, a Grafana dashboard next to the RED metrics and traces
 - [ ] Profiling: Pyroscope continuous profiling, plus py-spy and the Node.js CPU profiler; fix one hotspot found under load (with a test-first regression check)
+- [ ] Drift monitoring (DMLS ch. 8): alert on shifts in the input event mix and in the enrichment output distribution
 - [ ] Soak test: detect memory, connection and consumer-lag drift; a runbook for what to watch
 
 ## Phase 5 — Test environments at scale (about 2 weeks)
@@ -117,6 +120,10 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Render or Koyeb: `ingest-api` and `gateway`; ADR on free tiers going to sleep
 - [ ] Oracle Cloud Always Free: Ollama and the enricher (with demo mode as the fallback)
 - [ ] Continuous deployment from CircleCI: approval jobs, smoke tests, rollbacks
+- [ ] Test in production (DMLS ch. 9): shadow and canary releases for prompt or model versions, gated by evals
+- [ ] Inference benchmarks (IE, AIE ch. 9): time to first token, time per output token, throughput and cost across Ollama quantization levels, under load
+- [ ] Semantic and prompt caching (AIE ch. 9): hit rate and latency savings, measured
+- [ ] User feedback loop (AIE ch. 10): thumbs up or down on the dashboard feeds the eval dataset
 - [ ] Playwright against preview URLs; production monitoring and uptime checks
 - [ ] Web performance and accessibility: Lighthouse CI budgets (LCP, INP, CLS) and axe-core WCAG 2.2 AA checks on Vercel preview deployments
 - [ ] Production synthetic checks: k6 smoke tests only, within free-tier fair use (no load or stress against hosted tiers)
@@ -130,5 +137,6 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Coding-agent workflows: AGENTS.md and shared skills, delegating, reviewing diffs (Claude Code, Codex, Copilot)
 - [ ] Local Ollama optimization (nice to have): model comparison on the eval suite
 - [ ] Security review: an OWASP ASVS level 1 self-assessment, threat model refresh, Scorecard ≥ 7
+- [ ] ML/AI system design drills (MLSDI): run the framework on this platform and on 3 of the book's case studies
 - [ ] Interview readiness: every answer in `docs/interview/` backed by platform evidence; a mock interview on distributed testing, run by the mentor
 - [ ] Portfolio README, architecture diagram, demo script, and job-interview talking points
