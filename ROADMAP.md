@@ -16,11 +16,11 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Contracts skeleton: `docs/contracts/openapi.yaml`, `asyncapi.yaml`, and the first JSON Schema
 - [ ] Monorepo tooling: uv workspace (Python), pnpm workspace (TypeScript), `.editorconfig`, Makefile or justfile tasks
 - [ ] `ingest-api`: async FastAPI app, `/healthz` and `/readyz`, `POST /events` with Pydantic v2 models, unit tests
-- [ ] Event schema v1 (`EventIn`, `EnrichedEvent`) shared through JSON Schema
+- [ ] Event schema v1 for the surveillance domain (`CameraDetection`, `CameraHeartbeat`, `Incident`) shared through JSON Schema; privacy rule: no identity fields in any schema
 - [ ] `web/dashboard`: Next.js app with strict TypeScript and a first component test (vitest + Testing Library)
 - [ ] Shift left: pre-commit with ruff, mypy, eslint, tsc, gitleaks, hadolint
 - [ ] Docker: multi-stage, non-root images for `ingest-api`, health checks
-- [ ] CircleCI: first pipeline (lint → unit tests), caching, test results
+- [ ] CircleCI: first pipeline (lint → unit tests), caching, test results (JUnit) stored as artifacts
 - [ ] ADR-0005: monorepo layout and tooling
 - [ ] Threat model v0: STRIDE for the ingest flow, plus a data-flow diagram in arc42 §11
 
@@ -28,7 +28,12 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] `infra/compose.yaml`: Kafka 4.x (KRaft) and Schema Registry
 - [ ] Kafka fundamentals lab: topics, partitions, keys and ordering, replication and `min.insync.replicas`; inspect them with the CLI tools and an admin client in tests
 - [ ] Async Kafka producer in `ingest-api`: idempotent producer (`enable.idempotence`, `acks=all`), keys, headers, graceful shutdown; a test that a broker restart loses and duplicates nothing
+- [ ] Camera simulator: synthetic cameras and door sensors that publish detections and heartbeats, with switches to inject duplicates (overlapping cameras), clock skew, out-of-order delivery, dropped heartbeats and bursts
+- [ ] MQTT → Kafka bridge: Mosquitto plus your own async bridge service (keys by `camera_id`, idempotent publishing, backpressure), compared with the open-source Stream Reactor MQTT source connector in an ADR
+- [ ] Event time vs processing time: incidents use camera time with bounded lateness (watermarks); tests with skewed clocks
+- [ ] Incident state machine (opened → updated → escalated → resolved) with invariants and illegal-transition tests
 - [ ] Consumer skeleton in `enricher`: consumer groups, manual commits, retries, dead-letter topic
+- [ ] CircleCI path filtering: build and test only the services that changed (dynamic config)
 - [ ] Event flow model: sequence diagram, entity state machine and invariants, delivery guarantee per hop (AsyncAPI and arc42)
 - [ ] Idempotent consumer: idempotency key or conditional upsert; tests that replay duplicates and crash before commit
 - [ ] Out-of-order and late events for the same key: version or sequence checks (no last-writer-wins); partition-key ordering tests
@@ -59,6 +64,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] `EnrichedEventStore` port with two adapters, DynamoDB and MongoDB, both passing one shared contract test suite (access-pattern-first design: key-value vs document)
 - [ ] MongoDB for ops-agent incident documents: schema validation (`$jsonSchema`), indexes, and data validation and integrity tests
 - [ ] Migrations done safely: expand/contract (backward-compatible) migrations, tested upgrade and downgrade in CI, and zero-downtime rules in an ADR
+- [ ] Privacy by design: strip identity attributes (face or plate) at ingestion, with tests; TTL retention for detections and snapshots, with tested deletion; an access audit log for incident and snapshot views; a privacy section in the threat model
 - [ ] Database security: least-privilege roles per service, Postgres row-level security per tenant, SQL injection tests, and the Debezium user limited to replication
 - [ ] SQS as the dead-letter queue and redrive
 - [ ] Moto for unit tests; emulators for integration tests
@@ -85,6 +91,8 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Baseline before LLM (DMLS ch. 6): a cheap classical classifier (scikit-learn) for event category; compare cost and quality with the LLM, then a cascade that tries cheap first and escalates
 - [ ] Eval suite (promptfoo or DeepEval) with a baseline gate in CircleCI
 - [ ] Langfuse (self-hosted) traces, datasets and scores
+- [ ] The incident brain: correlate detections into incidents, dedupe across cameras, suppress false alarms (cheap classifier first, LLM when unsure), score severity with a stated reason
+- [ ] Nightly summary and "ask the system" Q&A agent over the incident store (tools and retrieval), with evals
 - [ ] Prompt-injection guardrails for event payloads
 - [ ] OWASP Top 10 for LLM applications: tool allow-lists, output handling, spend limits, no secrets in prompts or logs; red-team suite in CI
 
@@ -111,10 +119,18 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Image scanning with Trivy, SBOMs, and test splitting in CircleCI
 - [ ] Performance gate in CircleCI: load and spike tests in the disposable environment, compared with a stored baseline; a regression fails the build
 - [ ] Stress and breakpoint tests on kind, horizontal pod autoscaling (HPA), and a capacity-planning ADR (where it saturates and why)
-- [ ] Fault-injecting test harness: a producer and proxy that duplicate, delay, drop and reorder events on demand, used by the e2e suite
+- [ ] Fault-injecting test harness: the camera simulator and a proxy that duplicate, delay, drop and reorder events on demand, used by the e2e suite
 - [ ] Resilience: Toxiproxy faults between services (latency, timeouts, resets), plus Chaos Mesh pod and network chaos on kind; verify retries, circuit breakers and the DLQ hold their SLOs
 - [ ] Supply chain: SBOMs (CycloneDX) for every image, keyless cosign signing and attestation, actions and orbs pinned by SHA, OpenSSF Scorecard with a badge
 - [ ] Kubernetes security: Pod Security Standards (restricted), securityContext, NetworkPolicies, resource limits; Checkov for manifests and Helm
+
+### Robust build system, and the second domain: build insights
+- [ ] Build reliability: test splitting by timing, cache strategy (with a measured hit rate), reproducible builds (lockfiles, pinned toolchains, image digests), and a build-time SLO with an alert
+- [ ] Flaky-test detection and quarantine: rerun-on-failure data, a flakiness score per test from the JUnit history, automatic quarantine with an issue opened
+- [ ] Build observability: CircleCI pipelines traced with OpenTelemetry (jobs and steps as spans); queue time, duration and failure rates in Grafana
+- [ ] Build-insights domain as a second tenant: a webhook receiver for GitHub (`X-Hub-Signature-256` HMAC, `X-GitHub-Delivery` dedupe) and CircleCI (`circleci-signature` HMAC-SHA256, payload `id` dedupe) into Kafka. Acceptance test: no changes to the core services
+- [ ] CI failure explainer agent: classifies failures as code, test, flaky or infrastructure, with evidence, and comments on the PR
+- [ ] DORA metrics dashboard (lead time, deployment frequency, time to restore, change failure rate, rework rate), computed from this repo's own events
 
 ## Phase 6 — The ops-agent, an AI SRE (about 2 weeks)
 - [ ] Grafana alert webhook → `ops-agent`
@@ -142,10 +158,11 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 
 ## Phase 8 — Agents everywhere, and polish (about 2 weeks)
 - [ ] Test-generation agent (you review its output), and exploratory e2e through Playwright MCP
-- [ ] CircleCI build-failure explainer agent and a PR review agent
+- [ ] PR risk and review agent (build-insights domain): risk score from diff size, touched areas (migrations, security) and test coverage
 - [ ] AI for performance: the k6 MCP server and `k6 x agent` skills in Claude Code and Codex for writing and validating scripts; a `perf-analyst` agent that compares runs with the baseline, investigates through the Grafana MCP server (metrics, traces, profiles) and posts a regression report on the PR, tested with recorded results that contain known regressions
 - [ ] Coding-agent workflows: AGENTS.md and shared skills, delegating, reviewing diffs (Claude Code, Codex, Copilot)
 - [ ] Local Ollama optimization (nice to have): model comparison on the eval suite
+- [ ] Optional computer vision: run Frigate (or an ONNX detector) on public sample footage into the MQTT bridge; optional face blurring before snapshots are stored; vision-model snapshot descriptions (recorded responses in tests)
 - [ ] Security review: an OWASP ASVS level 1 self-assessment, threat model refresh, Scorecard ≥ 7
 - [ ] ML/AI system design drills (MLSDI): run the framework on this platform and on 3 of the book's case studies
 - [ ] Interview readiness: every answer in `docs/interview/` backed by platform evidence; a mock interview on distributed testing, run by the mentor

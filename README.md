@@ -1,8 +1,15 @@
 # real-time-ai-event-enrichment-platform
 
-A cloud-native platform that ingests events, enriches them in real time with AI agents, and streams the results to a live dashboard. It is built step by step, through short daily coding challenges.
+An **AI brain for event streams**, built step by step through short daily coding challenges:
+
+- **Smart surveillance brain** (primary): turns a flood of camera detections into a few explained incidents. It deduplicates across cameras, suppresses false alarms, scores severity, summarises the night and answers questions. Privacy by design: no facial recognition, no identity, limited retention.
+- **Build insights** (second domain): explains CI failures, detects flaky tests and tracks delivery metrics from GitHub and CircleCI events, dogfooding this repo's own build system.
+
+See [docs/PRODUCT.md](docs/PRODUCT.md) for the product and [ADR-0007](docs/adr/0007-product-domains-and-privacy-by-design.md) for why.
 
 ```
+ cameras ─MQTT─► bridge ─┐       GitHub / CircleCI ─webhooks─┐
+                        ▼                                   ▼
  clients ──► ingest-api (Python, FastAPI, async)
                  │  produce
                  ▼

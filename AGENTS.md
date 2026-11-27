@@ -2,7 +2,7 @@
 
 These instructions are shared by Claude Code (through `CLAUDE.md` → `@AGENTS.md`), Codex and other agents.
 
-This repository is a **progressive lab**. A real product, the real-time AI event enrichment platform, is built through daily coding challenges. Read `docs/GOALS.md`, `ROADMAP.md` and `.lab/state.json` before doing anything.
+This repository is a **progressive lab**. A real product is built through daily coding challenges: an AI brain for event streams. The primary domain is a **smart surveillance brain**, and the second domain is **build insights** from GitHub and CircleCI. Read `docs/PRODUCT.md`, `docs/GOALS.md`, `ROADMAP.md` and `.lab/state.json` before doing anything.
 
 ## Workflow: spec → test → code → docs
 Every change, by the learner or an agent, follows this order. Each step has a shared skill (installed in `.claude/skills/` and `.agents/skills/` from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills)):
@@ -29,6 +29,7 @@ Agent work also uses `agent-testing`, telemetry work uses `observability-instrum
 - **Non-functional testing:** NFRs are spec scenarios with numbers. k6 scripts in `tests/perf/` with thresholds and baselines; Locust for LLM paths; Toxiproxy and Chaos Mesh for resilience; Lighthouse CI and axe-core for the web. Heavy load runs only against local or disposable environments, never against free-tier hosts.
 - **Observability:** structured JSON logs, OpenTelemetry traces with context carried in Kafka headers, RED metrics, and GenAI semantic conventions for agent spans.
 - **Documentation:** arc42 in `docs/architecture/`; UML and C4 diagrams as Mermaid; contracts in `docs/contracts/` (OpenAPI 3.1, AsyncAPI 3); ADRs (MADR) in `docs/adr/`; runbooks in `docs/runbooks/`; living specs in `openspec/specs/`.
+- **Privacy by design (ADR-0007):** never identify people. No facial recognition and no licence-plate recognition; strip identity attributes at ingestion. Use only your own premises or public sample footage; retention by TTL with tested deletion; log access. Privacy rules are spec requirements with tests.
 - **Security:** secure by default (skill `security-hardening`): no secrets in git (gitleaks runs in pre-commit, push protection is on); `.env` is git-ignored and `.env.example` is committed; validate every input; pin dependencies; keep the scans green (CodeQL, Semgrep, Trivy, Checkov); follow the OWASP Top 10 for web, API and LLM applications.
 - **Commits:** `day-NNN: <summary>` for learner work, `lab(day-NNN): <summary>` for mentor commits. Commit at each green TDD step.
 - **Skills:** never edit `.claude/skills/` or `.agents/skills/` directly. Change them in the skills repo, then re-run the update command in `.lab/skills.json`.
