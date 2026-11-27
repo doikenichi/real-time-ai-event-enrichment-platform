@@ -12,7 +12,7 @@ Every change, by the learner or an agent, follows this order. Each step has a sh
 3. **Code (green → refactor):** the simplest passing code, then refactor with the tests green
 4. **Docs:** update the UML/C4 diagrams, OpenAPI/AsyncAPI contracts, arc42 sections and ADRs in the same change → skills `uml-and-c4-diagrams`, `api-and-event-contracts`, `architecture-docs`
 
-Agent work also uses `agent-testing`, telemetry work uses `observability-instrumentation`, every change is checked against `security-hardening`, and reviews use `code-review-mentor`.
+Agent work also uses `agent-testing`, telemetry work uses `observability-instrumentation`, every change is checked against `security-hardening`, NFR work (performance, resilience, accessibility) uses `performance-and-nfr-testing`, and reviews use `code-review-mentor`.
 
 ## For coding agents helping the learner
 - The learner writes the core code. Explain, hint, review and pair with them, but don't solve a challenge unless explicitly asked to. In TDD, offer the next failing test or a hint rather than the green step.
@@ -24,6 +24,7 @@ Agent work also uses `agent-testing`, telemetry work uses `observability-instrum
 - **Architecture:** ports and adapters. Domain code never imports SDKs directly. Adapters for Kafka, AWS, LLMs and MCP live behind interfaces, with in-memory or fake adapters for tests.
 - **LLM providers:** `RecordedProvider` (tests, CI, demo), `ClaudeAgentSdkProvider` and `CodexProvider` (local development with the learner's subscription login, personal use only), `OllamaProvider` (deployment). Never call the Anthropic API with subscription OAuth tokens, and never deploy subscription credentials. They are selected through `LLM_PROVIDER`.
 - **Testing:** unit → contract → integration (Testcontainers, AWS Emulator, Floci) → e2e (Playwright). Agent tests: scripted LLM, record/replay, trajectories, evals with thresholds, red-team tests, budgets. Telemetry is tested with in-memory exporters.
+- **Non-functional testing:** NFRs are spec scenarios with numbers. k6 scripts in `tests/perf/` with thresholds and baselines; Locust for LLM paths; Toxiproxy and Chaos Mesh for resilience; Lighthouse CI and axe-core for the web. Heavy load runs only against local or disposable environments, never against free-tier hosts.
 - **Observability:** structured JSON logs, OpenTelemetry traces with context carried in Kafka headers, RED metrics, and GenAI semantic conventions for agent spans.
 - **Documentation:** arc42 in `docs/architecture/`; UML and C4 diagrams as Mermaid; contracts in `docs/contracts/` (OpenAPI 3.1, AsyncAPI 3); ADRs (MADR) in `docs/adr/`; runbooks in `docs/runbooks/`; living specs in `openspec/specs/`.
 - **Security:** secure by default (skill `security-hardening`): no secrets in git (gitleaks runs in pre-commit, push protection is on); `.env` is git-ignored and `.env.example` is committed; validate every input; pin dependencies; keep the scans green (CodeQL, Semgrep, Trivy, Checkov); follow the OWASP Top 10 for web, API and LLM applications.

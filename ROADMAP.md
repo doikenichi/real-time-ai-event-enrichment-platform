@@ -6,7 +6,7 @@ Every weekday has **3 challenges** (A, B, C), each taking 10–20 minutes, at mo
 - **B — Full stack:** TypeScript gateway and the Next.js dashboard, end to end
 - **C — Cloud, DevOps and AI agents:** infrastructure, CI/CD, observability, coding agents, agent testing
 
-Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Security is secure-by-default from day 1 (skill `security-hardening`). Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
+Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Security is secure-by-default from day 1 (skill `security-hardening`). Non-functional quality (performance, resilience, accessibility) is tested from Phase 1 onward (skill `performance-and-nfr-testing`). Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
 
 ## Phase 0 — Foundations (about 2 weeks)
 - [ ] Repo security baseline: a ruleset on `main` (PRs only, no force pushes or deletion, conversation resolution), squash merge only, delete branches after merge, disable unused features
@@ -36,6 +36,8 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Dependency security: Dependabot alerts and security updates; `dependabot.yml` for uv, npm/pnpm, docker and github-actions; license allow-list check
 - [ ] SAST: CodeQL (security-extended) for Python and TypeScript; Semgrep in CircleCI with a severity gate; ruff `S` rules and eslint security rules
 - [ ] The ruleset requires the CI checks to pass before merge
+- [ ] First NFR: a quality scenario with numbers for `POST /events` (spec and arc42 §10), and a k6 smoke test (TypeScript, thresholds) in `tests/perf/` run on every PR
+- [ ] Kafka throughput baseline: produce/consume perf tools, end-to-end latency and consumer lag
 - [ ] API security: input validation tests with malicious payloads, rate limiting, CORS allow-list, security headers (OWASP API Top 10)
 
 ## Phase 2 — AWS, locally (about 2 weeks)
@@ -54,6 +56,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Tool calling: lookup tools for DynamoDB, S3 and HTTP; tool errors and timeouts
 - [ ] An MCP server exposing platform tools, with its own contract tests
 - [ ] Agent testing pyramid: tool unit tests → scripted LLM → record/replay → trajectories → evals → red-team → budgets
+- [ ] LLM path load test with Locust: concurrency limits, rate-limit handling and backoff, token and cost budget under load (recorded provider plus a short live run)
 - [ ] Eval suite (promptfoo or DeepEval) with a baseline gate in CircleCI
 - [ ] Langfuse (self-hosted) traces, datasets and scores
 - [ ] Prompt-injection guardrails for event payloads
@@ -66,12 +69,18 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] RED metrics, consumer lag, and LLM metrics (latency, tokens, cost, fallbacks)
 - [ ] Dashboards and alert rules as code, SLOs, runbooks in `docs/runbooks/`
 - [ ] Telemetry tests with in-memory exporters
+- [ ] Load testing with observability: average-load and spike tests (open arrival-rate model), k6 metrics streamed to Prometheus, a Grafana dashboard next to the RED metrics and traces
+- [ ] Profiling: Pyroscope continuous profiling, plus py-spy and the Node.js CPU profiler; fix one hotspot found under load (with a test-first regression check)
+- [ ] Soak test: detect memory, connection and consumer-lag drift; a runbook for what to watch
 
 ## Phase 5 — Test environments at scale (about 2 weeks)
 - [ ] Playwright e2e against the full compose stack
 - [ ] Disposable environment for each CircleCI pipeline: bring the stack up → test → tear it down
 - [ ] kind cluster, Kubernetes manifests, then Helm charts
 - [ ] Image scanning with Trivy, SBOMs, and test splitting in CircleCI
+- [ ] Performance gate in CircleCI: load and spike tests in the disposable environment, compared with a stored baseline; a regression fails the build
+- [ ] Stress and breakpoint tests on kind, horizontal pod autoscaling (HPA), and a capacity-planning ADR (where it saturates and why)
+- [ ] Resilience: Toxiproxy faults between services (latency, timeouts, resets), plus Chaos Mesh pod and network chaos on kind; verify retries, circuit breakers and the DLQ hold their SLOs
 - [ ] Supply chain: SBOMs (CycloneDX) for every image, keyless cosign signing and attestation, actions and orbs pinned by SHA, OpenSSF Scorecard with a badge
 - [ ] Kubernetes security: Pod Security Standards (restricted), securityContext, NetworkPolicies, resource limits; Checkov for manifests and Helm
 
@@ -89,12 +98,15 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Oracle Cloud Always Free: Ollama and the enricher (with demo mode as the fallback)
 - [ ] Continuous deployment from CircleCI: approval jobs, smoke tests, rollbacks
 - [ ] Playwright against preview URLs; production monitoring and uptime checks
+- [ ] Web performance and accessibility: Lighthouse CI budgets (LCP, INP, CLS) and axe-core WCAG 2.2 AA checks on Vercel preview deployments
+- [ ] Production synthetic checks: k6 smoke tests only, within free-tier fair use (no load or stress against hosted tiers)
 - [ ] DAST: OWASP ZAP baseline scan against preview and production URLs in CircleCI
 - [ ] Secrets in each platform's secret store, rotation runbook, least-privilege deploy tokens
 
 ## Phase 8 — Agents everywhere, and polish (about 2 weeks)
 - [ ] Test-generation agent (you review its output), and exploratory e2e through Playwright MCP
 - [ ] CircleCI build-failure explainer agent and a PR review agent
+- [ ] AI for performance: the k6 MCP server and `k6 x agent` skills in Claude Code and Codex for writing and validating scripts; a `perf-analyst` agent that compares runs with the baseline, investigates through the Grafana MCP server (metrics, traces, profiles) and posts a regression report on the PR, tested with recorded results that contain known regressions
 - [ ] Coding-agent workflows: AGENTS.md and shared skills, delegating, reviewing diffs (Claude Code, Codex, Copilot)
 - [ ] Local Ollama optimization (nice to have): model comparison on the eval suite
 - [ ] Security review: an OWASP ASVS level 1 self-assessment, threat model refresh, Scorecard ≥ 7
