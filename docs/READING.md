@@ -57,6 +57,8 @@ NodeDP chapter numbers 1–4 and 10–13 are checked against Packt's table of co
 | **5** | ch. 10 "Testing: Patterns and Best Practices" · ch. 12 "Scalability and Architectural Patterns" | — | TDD "in high gear and low gear" (which level to test at) |
 | **7–8** | ch. 11 "Advanced Recipes" (cancellation, batching and caching of async work) | — | CQRS; dependency injection and bootstrapping |
 
+**Persistence (ADR-0006):** DDIA ch. 3 (relational vs document models), ch. 4 (storage engines and indexes), ch. 6–8 (replication, sharding, transactions) and ch. 12 (change data capture, the outbox) · APP repository and unit of work · FP data classes for row and document mapping.
+
 **MLSDI runs alongside every phase:** its first chapter's framework (clarify requirements → frame as an ML task → data → model → evaluation → deployment and serving → monitoring) becomes a weekly design drill. Its case-study chapters are practised one per drill, each re-told with this platform's components.
 
 ## New lab milestones these books add
