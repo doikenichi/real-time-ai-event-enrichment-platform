@@ -14,6 +14,7 @@ A cloud-native platform that ingests events, enriches them in real time with AI 
                                               ▼
                                    web/dashboard (Next.js, live view)
 
+ Data: PostgreSQL (events, outbox → Debezium → Kafka, pgvector) · DynamoDB / MongoDB (enriched) · Valkey (cache)
  AWS (local): AWS Emulator + Floci ── S3 archive · DynamoDB store · SQS DLQ
  Observability: OpenTelemetry ─► Grafana (Prometheus · Loki · Tempo) + Langfuse (agents)
  Operations: ops-agent (AI SRE) investigates alerts through the Grafana MCP server
@@ -52,6 +53,7 @@ Instructions for coding agents live in [AGENTS.md](AGENTS.md), shared by Claude 
 | AI | Claude Agent SDK and Codex (local dev, subscription login), Ollama (deployment), recorded responses (tests), MCP |
 | Testing | pytest, vitest, Testcontainers, contract tests, Playwright, promptfoo / DeepEval |
 | Performance and NFRs | k6 (with its MCP server), Locust, Kafka perf tools, Pyroscope, Toxiproxy, Chaos Mesh, Lighthouse CI, axe-core |
+| Data | PostgreSQL 18 (with pgvector), Alembic, Debezium (CDC and outbox), DynamoDB (local) and MongoDB, Valkey |
 | Observability | OpenTelemetry, Grafana LGTM (Prometheus, Loki, Tempo), Langfuse |
 | Delivery | Docker, Terraform, kind, Kubernetes, Helm, CircleCI, Trivy, gitleaks, pre-commit |
 | Deployment | Vercel Hobby, Aiven Kafka free tier, Render / Koyeb, Oracle Cloud Always Free |
