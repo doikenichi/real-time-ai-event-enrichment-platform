@@ -1,6 +1,6 @@
 # How to develop on any machine (dev container)
 
-The whole toolchain (Python 3.13 with uv, Node.js 26 LTS with nvm and pnpm, Docker, GitHub CLI, OpenSpec, Claude Code and Codex) lives in a **dev container** defined in `.devcontainer/`. Each machine needs only three things.
+The whole toolchain (Python 3.15 with uv, Node.js 26 LTS with nvm and pnpm, Docker, GitHub CLI, OpenSpec, Claude Code and Codex) lives in a **dev container** defined in `.devcontainer/`. Each machine needs only three things.
 
 ## On each machine, once
 1. **git**
@@ -40,7 +40,7 @@ The same `.devcontainer/` opens in a browser through GitHub Codespaces. Personal
   - Why uv instead of pyenv: uv installs prebuilt Python builds in seconds and reads the same `.python-version` file, while pyenv compiles Python from source. Install pyenv only on a host where you won't use the container.
 - **Upgrading a runtime** is a one-line PR: change `.nvmrc` (and the node feature version) or `.python-version`, rebuild the container, and let CI prove it.
 - **Docker-in-Docker,** not docker-outside-of-docker: Testcontainers, Compose bind mounts and kind clusters behave the same on every host, at the cost of a separate image cache inside the container (kept in a volume).
-- **`post-create.sh`:** installs Python 3.13, the pinned CLIs, and the project dependencies once the workspaces exist.
+- **`post-create.sh`:** installs Python 3.15 (from `.python-version`), the pinned CLIs, and the project dependencies once the workspaces exist.
 - Versions are pinned. Updating them is a PR, like any other change. See ADR-0011.
 
 ## Troubleshooting
