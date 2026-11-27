@@ -25,8 +25,9 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Threat model v0: STRIDE for the ingest flow, plus a data-flow diagram in arc42 §11
 
 ## Phase 1 — Event backbone (about 2 weeks)
-- [ ] `infra/compose.yaml`: Kafka (KRaft) and Schema Registry
-- [ ] Async Kafka producer in `ingest-api`: idempotent producer, keys, headers, graceful shutdown
+- [ ] `infra/compose.yaml`: Kafka 4.x (KRaft) and Schema Registry
+- [ ] Kafka fundamentals lab: topics, partitions, keys and ordering, replication and `min.insync.replicas`; inspect them with the CLI tools and an admin client in tests
+- [ ] Async Kafka producer in `ingest-api`: idempotent producer (`enable.idempotence`, `acks=all`), keys, headers, graceful shutdown; a test that a broker restart loses and duplicates nothing
 - [ ] Consumer skeleton in `enricher`: consumer groups, manual commits, retries, dead-letter topic
 - [ ] Event flow model: sequence diagram, entity state machine and invariants, delivery guarantee per hop (AsyncAPI and arc42)
 - [ ] Idempotent consumer: idempotency key or conditional upsert; tests that replay duplicates and crash before commit
@@ -36,7 +37,9 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Eventual-consistency test helper: poll until the state matches, with an SLO timeout and the last observed state on failure (no sleeps)
 - [ ] Outbox pattern and idempotent processing
 - [ ] Integration tests with Testcontainers (Kafka); contract tests for event schemas (including Pact message pacts)
-- [ ] Consumer crash and rebalance test: kill a consumer mid-batch; no loss and no duplicate effects
+- [ ] Consumer crash and rebalance test: kill a consumer mid-batch; no loss and no duplicate effects; compare rebalances under the Kafka 4.x consumer group protocol (KIP-848)
+- [ ] Offsets and replay: reset a consumer group to a timestamp and rebuild state with idempotent projections; test that a replay converges
+- [ ] Schema evolution: Schema Registry compatibility modes, and a CI check that rejects breaking changes
 - [ ] `gateway` (TypeScript): Kafka consumer → Server-Sent Events, backpressure, AbortController
 - [ ] Dashboard: live event list over SSE, with reconnects
 - [ ] CircleCI: integration job on the `machine` executor
@@ -58,6 +61,9 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Ports and adapters: storage interfaces with AWS and in-memory adapters
 - [ ] Downstream validation: assert the DynamoDB and S3 state and the downstream topics, not just API responses
 - [ ] Reconciliation job: counts and checksums across ingested, enriched and stored data per window; as a test and as a scheduled check
+- [ ] Exactly-once inside Kafka: transactional read-process-write with `read_committed` consumers; a test that aborted transactions are never visible, and why external side effects still need idempotency
+- [ ] Compacted topic for latest-state-per-key (for example enrichment rules), with tombstones and a rebuild test
+- [ ] Same failure modes on SQS (through the emulators): visibility timeout, redrive policy, FIFO deduplication, to show the concepts transfer across brokers
 - [ ] Saga across services, with compensation for partial failures, and tests for each failure step
 
 ## Phase 3 — The enricher agent (about 3 weeks)
@@ -80,6 +86,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Dashboards and alert rules as code, SLOs, runbooks in `docs/runbooks/`
 - [ ] Telemetry tests with in-memory exporters
 - [ ] Trace-based e2e tests: assert the span path HTTP → Kafka → agent → store → SSE for one correlation id
+- [ ] Kafka share groups (Queues for Kafka, production-ready in 4.2) for parallel enrichment work: acknowledgement, redelivery and delivery-count tests
 - [ ] Distributed-bug metrics and alerts: lag, DLQ rate, retries, duplicates detected, reconciliation mismatches; a runbook for following one id across logs and traces
 - [ ] Load testing with observability: average-load and spike tests (open arrival-rate model), k6 metrics streamed to Prometheus, a Grafana dashboard next to the RED metrics and traces
 - [ ] Profiling: Pyroscope continuous profiling, plus py-spy and the Node.js CPU profiler; fix one hotspot found under load (with a test-first regression check)
