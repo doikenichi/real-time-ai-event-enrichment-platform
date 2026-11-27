@@ -20,6 +20,7 @@ Phase X · milestone · total time ≈ NN min
 **Context:** how this builds on yesterday
 **Industry standard:** the practice or standard followed, and why it's today's choice, with 2–3 primary sources linked
 **Book reference:** <short title>, ch. N, "<chapter title>": the concept, in your own words (from docs/READING.md)
+**Reference lab (when one applies):** a lab from docs/REFERENCES.md, and what to learn from it
 **1. Spec (≈3 min):** review `openspec/changes/<id>/`, and refine one scenario or add the missing edge case
 **2. Red:** the failing test(s) to write or finish, named after the scenarios
 **3. Green → refactor:** what to implement, plus the pattern to apply and why
