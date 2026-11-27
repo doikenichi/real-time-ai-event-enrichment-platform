@@ -1,0 +1,50 @@
+{
+  // One development environment for every machine. Host needs: git, Docker, and an editor
+  // that speaks the Dev Container spec (VS Code + Dev Containers, JetBrains, DevPod) or Codespaces.
+  "name": "real-time-ai-event-enrichment-platform",
+  "build": { "dockerfile": "Dockerfile" },
+
+  "features": {
+    // Official features only (Dev Container spec maintainers); pinned by major version,
+    // and by digest in devcontainer-lock.json once generated.
+    "ghcr.io/devcontainers/features/node:2": { "version": "24", "pnpmVersion": "12.24.0" },
+    "ghcr.io/devcontainers/features/docker-in-docker:4": { "moby": true },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  // Logins and caches survive rebuilds on this machine (never committed, never shared between machines)
+  "mounts": [
+    "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
+    "source=codex-config-${devcontainerId},target=/home/vscode/.codex,type=volume",
+    "source=uv-cache-${devcontainerId},target=/home/vscode/.cache/uv,type=volume",
+    "source=pnpm-store-${devcontainerId},target=/home/vscode/.local/share/pnpm,type=volume"
+  ],
+
+  "remoteUser": "vscode",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  // Dashboard, ingest-api, Grafana, Kafka UI; Codex's "Sign in with ChatGPT" callback
+  "forwardPorts": [3000, 8000, 3001, 8080, 1455],
+  "portsAttributes": { "1455": { "label": "codex login callback", "onAutoForward": "silent" } },
+
+  "hostRequirements": { "cpus": 4, "memory": "8gb" },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "ms-python.mypy-type-checker",
+        "dbaeumer.vscode-eslint",
+        "vitest.explorer",
+        "ms-playwright.playwright",
+        "cucumberopen.cucumber-official",
+        "bierner.markdown-mermaid",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-containers",
+        "anthropic.claude-code",
+        "openai.chatgpt"
+      ]
+    }
+  }
+}
