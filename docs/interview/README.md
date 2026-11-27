@@ -90,6 +90,8 @@ Write your drill answers here, newest first. The mentor reviews them in the next
 - How do you test data integrity across services and databases?
 - How do you set and enforce quality gates in CI?
 - Tell me about a critical defect you found before production (STAR).
+- How do you run an exploratory testing session, and how do you make it accountable? (charters, time boxes, tours, debriefs, turning findings into automated regression tests)
+- How would you explore an event-driven system that has no UI? (follow one event by correlation id, vary duplicates, order and faults, watch traces and topics)
 
 ### Full stack focus
 - How would you design an idempotent API?
