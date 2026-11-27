@@ -30,7 +30,7 @@ Every weekday at about 17:40 (America/Edmonton), a mentor agent:
 
 **Your loop:** merge the day's PR and `git pull`. Then `git switch -c work/day-NNN`, solve the challenges test-first, and commit at each green step with `day-NNN: <what you did>`. Open a PR into `main` and **Rebase and merge** it before about 17:30 the next weekday. `main` is protected, and rebase merges keep your TDD commits. If a day isn't finished, the next run adapts to it instead of moving on.
 
-See [ROADMAP.md](ROADMAP.md) for the curriculum, [docs/GOALS.md](docs/GOALS.md) for the goals and how they map to the target job, and [challenges/README.md](challenges/README.md) for the challenge format.
+See [ROADMAP.md](ROADMAP.md) for the curriculum, [docs/READING.md](docs/READING.md) for the reading plan, [docs/GOALS.md](docs/GOALS.md) for the goals and how they map to the target job, and [challenges/README.md](challenges/README.md) for the challenge format.
 
 ## How changes are made: spec → test → code → docs
 

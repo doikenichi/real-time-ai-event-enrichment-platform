@@ -41,7 +41,10 @@ Practice load, stress, spike, soak and breakpoint testing, plus resilience, web 
 ## 8. Master testing distributed, event-driven systems with Kafka, and explaining it
 A core skill to learn and to talk about with confidence: *"How would you approach testing a distributed, event-driven system? Discuss eventual consistency, duplicate events, retries, idempotency, downstream validation and observability."* Kafka is the backbone. Learn it in depth: partitions and keys, producer idempotence and acks, delivery semantics, transactions and exactly-once, consumer groups and rebalances (including the Kafka 4.x protocol), offsets and replay, retry topics and DLQ, Schema Registry compatibility, compaction, lag, and share groups. Practise every failure mode on this platform: duplicate, delayed, missing, out-of-order and poison events; retries; idempotency; outbox and sagas; eventual-consistency assertions without sleeps; downstream validation and reconciliation; trace-based tests with correlation IDs. Show the concepts transfer to other brokers (SQS in Phase 2). Build evidence-backed answers in `docs/interview/`.
 
-## 9. AI agents wherever they add value
+## 9. Learn from the canon, and apply it
+Get the most out of five books by reading just in time and applying each idea in the platform the same week: *Designing Data-Intensive Applications* (2nd ed.), *AI Engineering*, *Designing Machine Learning Systems*, *Machine Learning System Design Interview* and *Inference Engineering*. The plan is in `docs/READING.md`, and notes in your own words go in `docs/reading-notes/`. Every challenge links to a chapter, and interview answers cite the concepts.
+
+## 10. AI agents wherever they add value
 The enricher agent, the ops-agent (AI SRE), test-generation and exploratory e2e agents, LLM-as-judge evals, a CircleCI build-failure agent, PR review, and coding agents. You still write the core code yourself; agents are what you build, test, monitor and work with.
 
 ## Constraints
