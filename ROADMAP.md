@@ -123,7 +123,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 ## Phase 5 — Test environments at scale (about 2 weeks)
 - [ ] BDD e2e against the full compose stack: Gherkin features from the spec scenarios, playwright-bdd (web) and pytest-bdd (API and event flows), `@smoke` and `@regression` suites in CircleCI, with the HTML report as living documentation
 - [ ] Disposable environment for each CircleCI pipeline: bring the stack up → test → tear it down
-- [ ] kind cluster, Kubernetes manifests, then Helm charts
+- [ ] kind cluster, Kubernetes manifests, then Helm charts (reference lab: brunobml/helm-lab, see `docs/REFERENCES.md`)
 - [ ] GitOps with Argo CD (ADR-0010; reference lab: brunobml/gitops-control-plane): self-managed Argo CD on the local cluster syncing `infra/gitops/`; CircleCI updates image tags by PR; an ApplicationSet pull-request generator creates one preview namespace per open PR; sync waves and health checks; rollback by revert
 - [ ] ReportPortal (ADR-0009), self-hosted on the local cluster through Argo CD: every pipeline publishes results (non-fatal); triage states for failures; compare its auto-analysis and flaky detection with our CI failure explainer and flaky score on the same runs
 - [ ] Image scanning with Trivy, SBOMs, and test splitting in CircleCI
@@ -156,7 +156,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Aiven free Kafka (TLS/SASL config, environment-based settings)
 - [ ] Managed databases on free tiers: Neon (Postgres, with a branch per PR as a disposable test database) and MongoDB Atlas Free; the adapter is chosen by configuration; Valkey self-hosted on Oracle
 - [ ] Render or Koyeb: `ingest-api` and `gateway`; ADR on free tiers going to sleep
-- [ ] Oracle Cloud Always Free: Ollama and the enricher (with demo mode as the fallback)
+- [ ] Oracle Cloud Always Free: Ollama and the enricher (with demo mode as the fallback; reference lab: brunobml/ollama-lab)
 - [ ] Continuous deployment from CircleCI: approval jobs, smoke tests, rollbacks
 - [ ] Test in production (DMLS ch. 9): shadow and canary releases for prompt or model versions, gated by evals
 - [ ] Inference benchmarks (IE, AIE ch. 9): time to first token, time per output token, throughput and cost across Ollama quantization levels, under load
