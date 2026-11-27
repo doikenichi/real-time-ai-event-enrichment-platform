@@ -164,7 +164,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] AI for performance: the k6 MCP server and `k6 x agent` skills in Claude Code and Codex for writing and validating scripts; a `perf-analyst` agent that compares runs with the baseline, investigates through the Grafana MCP server (metrics, traces, profiles) and posts a regression report on the PR, tested with recorded results that contain known regressions
 - [ ] Coding-agent workflows: AGENTS.md and shared skills, delegating, reviewing diffs (Claude Code, Codex, Copilot)
 - [ ] Local Ollama optimization (nice to have): model comparison on the eval suite
-- [ ] Optional computer vision: run Frigate (or an ONNX detector) on public sample footage into the MQTT bridge; optional face blurring before snapshots are stored; vision-model snapshot descriptions (recorded responses in tests)
+- [ ] Optional computer vision: run Frigate (or an ONNX detector) on public sample footage, and on the learner's own recorded clips (frames extracted with `ffmpeg`, kept in git-ignored `data/footage/`), into the MQTT bridge; optional face blurring before snapshots are stored; vision-model snapshot descriptions (recorded responses in tests)
 - [ ] Security review: an OWASP ASVS level 1 self-assessment, threat model refresh, Scorecard ≥ 7
 - [ ] ML/AI system design drills (MLSDI): run the framework on this platform and on 3 of the book's case studies
 - [ ] Interview readiness: every answer in `docs/interview/` backed by platform evidence; a mock interview on distributed testing, run by the mentor

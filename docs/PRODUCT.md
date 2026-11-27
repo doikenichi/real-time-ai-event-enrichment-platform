@@ -43,6 +43,10 @@ Cameras produce a flood of motion and object detections: swaying trees, cats, th
 1. **Simulator (Phase 1):** synthetic cameras that can inject duplicates, clock skew, out-of-order events, dropped heartbeats and bursts on demand. It doubles as the load-test traffic generator.
 2. **MQTT bridge:** cameras and NVRs commonly publish over MQTT. The platform bridges MQTT (Mosquitto) into Kafka, with your own async bridge first and the open-source Stream Reactor MQTT connector as the alternative.
 3. **Frigate (optional, later):** the open-source NVR that does real object detection and publishes events over MQTT, run on public sample footage.
+4. **Your own recorded footage (planned):** the learner can record real clips from their own premises for real video analysis. Still frames are extracted from the clips (for example with `ffmpeg`, one frame every N seconds or on scene change) and fed to the detector and to vision-model descriptions. Rules:
+   - **Never in git.** Clips and frames live in a git-ignored `data/footage/` folder (or a local S3 bucket in the emulator), never in commits, PRs or CI artifacts. Tests use tiny synthetic or public-domain frames.
+   - **Same privacy rules as everything else:** only your own premises, no people who haven't agreed, identity attributes stripped, optional face blurring before frames are stored, and TTL deletion of clips and frames, with a test.
+   - **Recorded for tests:** detector and vision-model outputs on these frames are recorded once, and CI replays them; no footage is needed to run the suite.
 
 ### Why this domain is great for the learning goals
 - **Duplicates:** overlapping cameras and producer retries → idempotent incident updates.
