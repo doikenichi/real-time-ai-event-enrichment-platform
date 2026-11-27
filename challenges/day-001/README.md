@@ -4,7 +4,7 @@ Phase 0 · Foundations · total time ≈ 55 min
 The first day lays three foundations at once: a test-first Python service, a test-first React component, and a protected repository. Each challenge follows **spec → test → code → docs**.
 
 ## Setup (≈5 min, once)
-Prerequisites: the dev container (`.devcontainer/`, see `docs/how-to/develop-on-any-machine.md`), which provides Python 3.13 with [uv](https://docs.astral.sh/uv/), Node.js 26 LTS with nvm and pnpm, and the GitHub CLI (`gh auth login`). Without it: Python 3.13, uv, Node.js 26 LTS and pnpm on your host.
+Prerequisites: the dev container (`.devcontainer/`, see `docs/how-to/develop-on-any-machine.md`), which provides Python 3.15 with [uv](https://docs.astral.sh/uv/), Node.js 26 LTS with nvm and pnpm, and the GitHub CLI (`gh auth login`). Without it: Python 3.15, uv, Node.js 26 LTS and pnpm on your host.
 
 ```bash
 git switch -c work/day-001                     # from today on, work happens on a branch (see Challenge C)
