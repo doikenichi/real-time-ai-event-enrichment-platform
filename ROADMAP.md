@@ -6,7 +6,7 @@ Every weekday has **3 challenges** (A, B, C), each taking 10–20 minutes, at mo
 - **B — Full stack:** TypeScript gateway and the Next.js dashboard, end to end
 - **C — Cloud, DevOps and AI agents:** infrastructure, CI/CD, observability, coding agents, agent testing
 
-Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Security is secure-by-default from day 1 (skill `security-hardening`). Non-functional quality (performance, resilience, accessibility) is tested from Phase 1 onward (skill `performance-and-nfr-testing`). Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
+Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Security is secure-by-default from day 1 (skill `security-hardening`). Distributed-systems testing is a core thread (skill `distributed-event-testing`): every event-flow milestone includes its failure-mode tests. Non-functional quality (performance, resilience, accessibility) is tested from Phase 1 onward (skill `performance-and-nfr-testing`). Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
 
 ## Phase 0 — Foundations (about 2 weeks)
 - [ ] Repo security baseline: a ruleset on `main` (PRs only, no force pushes or deletion, conversation resolution), squash merge only, delete branches after merge, disable unused features
@@ -28,8 +28,15 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] `infra/compose.yaml`: Kafka (KRaft) and Schema Registry
 - [ ] Async Kafka producer in `ingest-api`: idempotent producer, keys, headers, graceful shutdown
 - [ ] Consumer skeleton in `enricher`: consumer groups, manual commits, retries, dead-letter topic
+- [ ] Event flow model: sequence diagram, entity state machine and invariants, delivery guarantee per hop (AsyncAPI and arc42)
+- [ ] Idempotent consumer: idempotency key or conditional upsert; tests that replay duplicates and crash before commit
+- [ ] Out-of-order and late events for the same key: version or sequence checks (no last-writer-wins); partition-key ordering tests
+- [ ] Poison events: DLQ with the reason in headers, without blocking the partition; redrive tool and test
+- [ ] Retries: exponential backoff with jitter and capped attempts; a test proving retries plus idempotency give no duplicate effects
+- [ ] Eventual-consistency test helper: poll until the state matches, with an SLO timeout and the last observed state on failure (no sleeps)
 - [ ] Outbox pattern and idempotent processing
-- [ ] Integration tests with Testcontainers (Kafka); contract tests for event schemas
+- [ ] Integration tests with Testcontainers (Kafka); contract tests for event schemas (including Pact message pacts)
+- [ ] Consumer crash and rebalance test: kill a consumer mid-batch; no loss and no duplicate effects
 - [ ] `gateway` (TypeScript): Kafka consumer → Server-Sent Events, backpressure, AbortController
 - [ ] Dashboard: live event list over SSE, with reconnects
 - [ ] CircleCI: integration job on the `machine` executor
@@ -49,6 +56,9 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Terraform against Floci: modules, remote state pattern, `terraform test`
 - [ ] IaC scanning with Checkov and Trivy config; least-privilege IAM policies for each service
 - [ ] Ports and adapters: storage interfaces with AWS and in-memory adapters
+- [ ] Downstream validation: assert the DynamoDB and S3 state and the downstream topics, not just API responses
+- [ ] Reconciliation job: counts and checksums across ingested, enriched and stored data per window; as a test and as a scheduled check
+- [ ] Saga across services, with compensation for partial failures, and tests for each failure step
 
 ## Phase 3 — The enricher agent (about 3 weeks)
 - [ ] `LLMProvider` port and adapters: `RecordedProvider`, `ClaudeAgentSdkProvider`, `CodexProvider` (`OllamaProvider` comes later)
@@ -69,6 +79,8 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] RED metrics, consumer lag, and LLM metrics (latency, tokens, cost, fallbacks)
 - [ ] Dashboards and alert rules as code, SLOs, runbooks in `docs/runbooks/`
 - [ ] Telemetry tests with in-memory exporters
+- [ ] Trace-based e2e tests: assert the span path HTTP → Kafka → agent → store → SSE for one correlation id
+- [ ] Distributed-bug metrics and alerts: lag, DLQ rate, retries, duplicates detected, reconciliation mismatches; a runbook for following one id across logs and traces
 - [ ] Load testing with observability: average-load and spike tests (open arrival-rate model), k6 metrics streamed to Prometheus, a Grafana dashboard next to the RED metrics and traces
 - [ ] Profiling: Pyroscope continuous profiling, plus py-spy and the Node.js CPU profiler; fix one hotspot found under load (with a test-first regression check)
 - [ ] Soak test: detect memory, connection and consumer-lag drift; a runbook for what to watch
@@ -80,6 +92,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Image scanning with Trivy, SBOMs, and test splitting in CircleCI
 - [ ] Performance gate in CircleCI: load and spike tests in the disposable environment, compared with a stored baseline; a regression fails the build
 - [ ] Stress and breakpoint tests on kind, horizontal pod autoscaling (HPA), and a capacity-planning ADR (where it saturates and why)
+- [ ] Fault-injecting test harness: a producer and proxy that duplicate, delay, drop and reorder events on demand, used by the e2e suite
 - [ ] Resilience: Toxiproxy faults between services (latency, timeouts, resets), plus Chaos Mesh pod and network chaos on kind; verify retries, circuit breakers and the DLQ hold their SLOs
 - [ ] Supply chain: SBOMs (CycloneDX) for every image, keyless cosign signing and attestation, actions and orbs pinned by SHA, OpenSSF Scorecard with a badge
 - [ ] Kubernetes security: Pod Security Standards (restricted), securityContext, NetworkPolicies, resource limits; Checkov for manifests and Helm
@@ -110,4 +123,5 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Coding-agent workflows: AGENTS.md and shared skills, delegating, reviewing diffs (Claude Code, Codex, Copilot)
 - [ ] Local Ollama optimization (nice to have): model comparison on the eval suite
 - [ ] Security review: an OWASP ASVS level 1 self-assessment, threat model refresh, Scorecard ≥ 7
+- [ ] Interview readiness: every answer in `docs/interview/` backed by platform evidence; a mock interview on distributed testing, run by the mentor
 - [ ] Portfolio README, architecture diagram, demo script, and job-interview talking points

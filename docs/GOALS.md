@@ -36,7 +36,10 @@ Before proposing a lab, the mentor researches current industry standards and bes
 ## 7. Performance and non-functional quality
 Practice load, stress, spike, soak and breakpoint testing, plus resilience, web performance and accessibility testing, on the platform itself. NFRs are written as spec scenarios with numbers, derived from SLOs, and CI is gated on them. The tools are free and widely used: k6 (default), Locust (Python and LLM paths), Kafka perf tools, Pyroscope and py-spy (profiling), Toxiproxy and Chaos Mesh (fault injection), Lighthouse CI (web vitals) and axe-core (WCAG 2.2 AA). AI works on top: the official k6 MCP server and skills for Claude Code and Codex, and a perf-analyst agent that explains regressions. Heavy load runs only against local or disposable environments, never against free-tier hosts.
 
-## 8. AI agents wherever they add value
+## 8. Master testing distributed, event-driven systems, and explaining it
+A core skill to learn and be able to talk about with confidence. Practise every failure mode on this platform: duplicate, delayed, missing, out-of-order and poison events; retries and backoff; idempotency; DLQ and redrive; consumer rebalances; outbox and sagas; eventual-consistency assertions without sleeps; downstream validation and reconciliation; trace-based tests with correlation IDs. Connect it to past experience (Paysafe asynchronous microservices on MapR, whose event store is Kafka-API compatible), and build answers with evidence in `docs/interview/`.
+
+## 9. AI agents wherever they add value
 The enricher agent, the ops-agent (AI SRE), test-generation and exploratory e2e agents, LLM-as-judge evals, a CircleCI build-failure agent, PR review, and coding agents. You still write the core code yourself; agents are what you build, test, monitor and work with.
 
 ## Constraints
