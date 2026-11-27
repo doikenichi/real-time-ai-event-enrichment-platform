@@ -13,7 +13,8 @@ The learner works on more than one machine (a desktop and a laptop) and doesn't 
 
 ## Decision outcome
 **Option 1**, with Codespaces as the fallback that reuses the same definition:
-- Base image `mcr.microsoft.com/devcontainers/base:ubuntu-24.04`; uv copied from Astral's image; official features only (Node 24 with pnpm, Docker-in-Docker, GitHub CLI); pinned CLI versions in `post-create.sh`.
+- Base image `mcr.microsoft.com/devcontainers/base:resolute` (Ubuntu 26.04 LTS); uv copied from Astral's image; official features only (Node.js 26 LTS through nvm, with pnpm; Docker-in-Docker; GitHub CLI); pinned CLI versions in `post-create.sh`.
+- **LTS lines only** for the OS and Node.js; the versions live in `.nvmrc` and `.python-version`, which nvm, uv, pyenv and mise all read. uv replaces pyenv inside the container (prebuilt Pythons, no compiling).
 - **Docker-in-Docker** over docker-outside-of-docker, because Testcontainers, Compose bind mounts and kind behave the same everywhere.
 - Logins (GitHub, Claude, Codex) and caches live in per-machine Docker volumes: never committed, never shared, never in an image.
 - How-to: `docs/how-to/develop-on-any-machine.md`.

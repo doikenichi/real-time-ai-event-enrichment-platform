@@ -1,6 +1,6 @@
 # How to develop on any machine (dev container)
 
-The whole toolchain (Python 3.13 with uv, Node 24 with pnpm, Docker, GitHub CLI, OpenSpec, Claude Code and Codex) lives in a **dev container** defined in `.devcontainer/`. Each machine needs only three things.
+The whole toolchain (Python 3.13 with uv, Node.js 26 LTS with nvm and pnpm, Docker, GitHub CLI, OpenSpec, Claude Code and Codex) lives in a **dev container** defined in `.devcontainer/`. Each machine needs only three things.
 
 ## On each machine, once
 1. **git**
@@ -32,8 +32,13 @@ Commit and push on one machine, pull on the other. That's all: the container def
 The same `.devcontainer/` opens in a browser through GitHub Codespaces. Personal accounts include 120 core hours and 15 GB of storage a month, which is about 30 hours on the 4-core machine this stack needs. Stop the codespace when you finish, and delete old ones to save storage.
 
 ## How it's built
-- **Base image:** `mcr.microsoft.com/devcontainers/base:ubuntu-24.04`, plus uv copied from Astral's official image (`.devcontainer/Dockerfile`).
-- **Features** (official ones only): Node 24 with pnpm, Docker-in-Docker, GitHub CLI.
+- **Base image:** `mcr.microsoft.com/devcontainers/base:resolute` (Ubuntu 26.04 LTS), plus uv copied from Astral's official image (`.devcontainer/Dockerfile`).
+- **Features** (official ones only): Node.js 26 LTS (through nvm) with pnpm, Docker-in-Docker, GitHub CLI.
+- **Runtime versions live in the standard pin files,** so every tool agrees on them:
+  - `.python-version` → uv inside the container; pyenv or mise if you ever work on a host without the container
+  - `.nvmrc` → nvm inside the container; nvm, fnm or mise on a host
+  - Why uv instead of pyenv: uv installs prebuilt Python builds in seconds and reads the same `.python-version` file, while pyenv compiles Python from source. Install pyenv only on a host where you won't use the container.
+- **Upgrading a runtime** is a one-line PR: change `.nvmrc` (and the node feature version) or `.python-version`, rebuild the container, and let CI prove it.
 - **Docker-in-Docker,** not docker-outside-of-docker: Testcontainers, Compose bind mounts and kind clusters behave the same on every host, at the cost of a separate image cache inside the container (kept in a volume).
 - **`post-create.sh`:** installs Python 3.13, the pinned CLIs, and the project dependencies once the workspaces exist.
 - Versions are pinned. Updating them is a PR, like any other change. See ADR-0011.
