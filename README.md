@@ -51,6 +51,7 @@ Instructions for coding agents live in [AGENTS.md](AGENTS.md), shared by Claude 
 | AWS (local) | AWS Emulator (SDK work), Floci (Terraform/CI), Moto (unit tests) |
 | AI | Claude Agent SDK and Codex (local dev, subscription login), Ollama (deployment), recorded responses (tests), MCP |
 | Testing | pytest, vitest, Testcontainers, contract tests, Playwright, promptfoo / DeepEval |
+| Performance and NFRs | k6 (with its MCP server), Locust, Kafka perf tools, Pyroscope, Toxiproxy, Chaos Mesh, Lighthouse CI, axe-core |
 | Observability | OpenTelemetry, Grafana LGTM (Prometheus, Loki, Tempo), Langfuse |
 | Delivery | Docker, Terraform, kind, Kubernetes, Helm, CircleCI, Trivy, gitleaks, pre-commit |
 | Deployment | Vercel Hobby, Aiven Kafka free tier, Render / Koyeb, Oracle Cloud Always Free |
