@@ -18,6 +18,7 @@ Phase X · milestone · total time ≈ NN min
 **Serves:** which goal(s) in docs/GOALS.md and which job requirement
 **Context:** how this builds on yesterday
 **Industry standard:** the practice or standard followed, and why it's today's choice, with 2–3 primary sources linked
+**Book reference:** <short title>, ch. N, "<chapter title>": the concept, in your own words (from docs/READING.md)
 **1. Spec (≈3 min):** review `openspec/changes/<id>/`, and refine one scenario or add the missing edge case
 **2. Red:** the failing test(s) to write or finish, named after the scenarios
 **3. Green → refactor:** what to implement, plus the pattern to apply and why
@@ -32,6 +33,9 @@ Phase X · milestone · total time ≈ NN min
 ...
 
 ## Stretch (optional)
+
+## Reading this week (Fridays; optional, about 2 × 25 min, outside the 60 min)
+One or two focused sections for next week's milestones, plus a reflection prompt. Notes go in `docs/reading-notes/`.
 
 ## Interview drill (optional, ≈5 min, outside the 60 min)
 One question tied to today's work. Answer it in `docs/interview/README.md`, citing today's code as evidence.
