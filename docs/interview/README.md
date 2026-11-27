@@ -90,3 +90,17 @@ Aim for about 2 minutes spoken. Use STAR (Situation, Task, Action, Result) for b
 - How do you handle schema evolution across producers and consumers?
 - How do you explain an architecture trade-off to a non-technical client?
 - Tell me about a production incident you debugged across services (STAR).
+
+---
+
+## ML / AI system design (MLSDI framework)
+Asked in AI engineer and senior full stack interviews. Practise it weekly, using this platform as the example.
+
+**Framework:** clarify requirements → frame it as an ML task (inputs, outputs, objective) → data preparation → model development (start with a baseline) → evaluation (offline, then online) → deployment and serving (latency, cost, inference optimization) → monitoring (drift, feedback loops).
+
+### Drills
+- Design the real-time AI event enrichment platform end to end. Where does a classical model beat an LLM? (MLSDI framework; DMLS ch. 6; AIE ch. 1)
+- How would you detect and handle data distribution shift in the enrichment pipeline? (DMLS ch. 8)
+- How do you evaluate an LLM feature before and after launch? (AIE ch. 3–4; DMLS ch. 9)
+- How would you cut inference cost by 5× without losing quality? (AIE ch. 9; IE)
+- Re-tell an MLSDI case study (for example harmful content detection, or a recommendation system) using this platform's components.
