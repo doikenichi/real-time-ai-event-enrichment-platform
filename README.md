@@ -58,7 +58,7 @@ Instructions for coding agents live in [AGENTS.md](AGENTS.md), shared by Claude 
 | Events | Apache Kafka (KRaft), Confluent Schema Registry |
 | AWS (local) | AWS Emulator (SDK work), Floci (Terraform/CI), Moto (unit tests) |
 | AI | Claude Agent SDK and Codex (local dev, subscription login), Ollama (deployment), recorded responses (tests), MCP |
-| Testing | pytest, vitest, Testcontainers, contract tests, Playwright, promptfoo / DeepEval |
+| Testing | pytest, vitest, Testcontainers, contract tests, Playwright with BDD (playwright-bdd, pytest-bdd), promptfoo / DeepEval |
 | Performance and NFRs | k6 (with its MCP server), Locust, Kafka perf tools, Pyroscope, Toxiproxy, Chaos Mesh, Lighthouse CI, axe-core |
 | Data | PostgreSQL 18 (with pgvector), Alembic, Debezium (CDC and outbox), DynamoDB (local) and MongoDB, Valkey |
 | Observability | OpenTelemetry, Grafana LGTM (Prometheus, Loki, Tempo), Langfuse |
@@ -74,7 +74,7 @@ services/gateway/      TypeScript service that streams results
 services/ops-agent/    Python AI SRE agent
 web/dashboard/         Next.js live dashboard
 tests/contract/        cross-service contract tests
-tests/e2e/             Playwright end-to-end tests
+tests/e2e/             BDD end-to-end tests (Gherkin features, playwright-bdd, pytest-bdd)
 infra/                 compose, terraform, k8s, helm, observability
 .circleci/             CI/CD pipeline
 openspec/              living specs and change proposals (OpenSpec)

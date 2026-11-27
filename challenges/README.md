@@ -34,6 +34,16 @@ Phase X · milestone · total time ≈ NN min
 ## C — Cloud, DevOps and AI agents (≈15 min)
 ...
 
+## Exploratory session variant (once a week, replaces one of A, B or C, ≈15–20 min)
+**Charter:** Explore <target> with <tour, data, tool or fault> to discover <risks or questions>
+**Tour:** one of Whittaker's tours (see `docs/testing/exploratory/README.md`), and why it fits this week's changes
+**Persona:** Maya, Sam or Dev
+**Book reference:** EST, ch. N, "<chapter title>"
+**Setup (≈2 min):** how to start the stack and which tools to have open
+**Session (≈12 min):** a few starting ideas for varying inputs, state, data and environment; no expected results
+**Debrief (≈4 min):** fill in the session sheet `docs/testing/exploratory/sessions/day-NNN.md` (PROOF, time split, bugs, new charters)
+**Done when:** the session sheet is committed, and each bug has an issue and a failing `@regression` scenario (or a note on why not)
+
 ## Stretch (optional)
 
 ## Reading this week (Fridays; optional, about 2 × 25 min, outside the 60 min)

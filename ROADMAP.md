@@ -24,6 +24,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Docker: multi-stage, non-root images for `ingest-api`, health checks
 - [ ] CircleCI: first pipeline (lint → unit tests), caching, test results (JUnit) stored as artifacts
 - [ ] ADR-0005: monorepo layout and tooling
+- [ ] First exploratory session (EST ch. 3): charter and session sheet for `ingest-api` health and `POST /events`, varying input, state and environment; bugs become regression scenarios
 - [ ] Threat model v0: STRIDE for the ingest flow, plus a data-flow diagram in arc42 §11
 
 ## Phase 1 — Event backbone (about 2 weeks)
@@ -37,6 +38,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Consumer skeleton in `enricher`: consumer groups, manual commits, retries, dead-letter topic
 - [ ] CircleCI path filtering: build and test only the services that changed (dynamic config)
 - [ ] Event flow model: sequence diagram, entity state machine and invariants, delivery guarantee per hop (AsyncAPI and arc42)
+- [ ] Exploratory tours on the event backbone (EST ch. 4): a FedEx tour following one detection by correlation id through MQTT → Kafka → consumer, and Obsessive-Compulsive and Antisocial tours with duplicate, malformed and poison events from the simulator
 - [ ] Idempotent consumer: idempotency key or conditional upsert; tests that replay duplicates and crash before commit
 - [ ] Out-of-order and late events for the same key: version or sequence checks (no last-writer-wins); partition-key ordering tests
 - [ ] Poison events: DLQ with the reason in headers, without blocking the partition; redrive tool and test
@@ -115,12 +117,13 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Soak test: detect memory, connection and consumer-lag drift; a runbook for what to watch
 
 ## Phase 5 — Test environments at scale (about 2 weeks)
-- [ ] Playwright e2e against the full compose stack
+- [ ] BDD e2e against the full compose stack: Gherkin features from the spec scenarios, playwright-bdd (web) and pytest-bdd (API and event flows), `@smoke` and `@regression` suites in CircleCI, with the HTML report as living documentation
 - [ ] Disposable environment for each CircleCI pipeline: bring the stack up → test → tear it down
 - [ ] kind cluster, Kubernetes manifests, then Helm charts
 - [ ] Image scanning with Trivy, SBOMs, and test splitting in CircleCI
 - [ ] Performance gate in CircleCI: load and spike tests in the disposable environment, compared with a stored baseline; a regression fails the build
 - [ ] Stress and breakpoint tests on kind, horizontal pod autoscaling (HPA), and a capacity-planning ADR (where it saturates and why)
+- [ ] Hybrid exploration (EST ch. 5): vary the BDD scenarios (insert, remove and repeat steps, swap data); Saboteur and Rained-Out tours with Toxiproxy faults and cancelled operations; findings feed the `@regression` suite
 - [ ] Fault-injecting test harness: the camera simulator and a proxy that duplicate, delay, drop and reorder events on demand, used by the e2e suite
 - [ ] Resilience: Toxiproxy faults between services (latency, timeouts, resets), plus Chaos Mesh pod and network chaos on kind; verify retries, circuit breakers and the DLQ hold their SLOs
 - [ ] Supply chain: SBOMs (CycloneDX) for every image, keyless cosign signing and attestation, actions and orbs pinned by SHA, OpenSSF Scorecard with a badge

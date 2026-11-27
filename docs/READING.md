@@ -1,4 +1,4 @@
-# Reading plan: ten books, applied to this platform
+# Reading plan: eleven books, applied to this platform
 
 Read a little, just in time, and apply it the same week. The mentor assigns reading that matches the current milestone, links each challenge to a chapter, and checks your notes (skill `reading-companion`).
 
@@ -16,6 +16,12 @@ Read a little, just in time, and apply it the same week. The mentor assigns read
 |---|---|---|
 | **LI** | *Lean Inception: How to Align People and Build the Right Product*, Paulo Caroli (2018); the activities are also summarised on martinfowler.com | Vision, personas, journeys, feature review, the Feature Sequencer and the MVP Canvas behind `docs/product/lean-inception.md` |
 | **DOET** | *The Design of Everyday Things*, revised and expanded edition, Don Norman (Basic Books, 2013) | Discoverability, affordances, signifiers, constraints, mapping, feedback, conceptual models, designing for error: the basis of `docs/ux/PRINCIPLES.md` |
+
+**Testing craft:**
+
+| Short name | Book | Why it matters here |
+|---|---|---|
+| **EST** | *Exploratory Software Testing: Tips, Tricks, Tours, and Techniques to Guide Test Design*, James A. Whittaker (Addison-Wesley, 2009) | Exploratory testing as a discipline: varying inputs, state, code paths, data and environment, and the tourist metaphor with its tours. The weekly exploratory sessions follow it (`docs/testing/exploratory/`) |
 
 **Language and design books** (how to write the code well, in each language):
 
@@ -65,6 +71,8 @@ NodeDP chapter numbers 1–4 and 10–13 are checked against Packt's table of co
 | **7–8** | ch. 11 "Advanced Recipes" (cancellation, batching and caching of async work) | — | CQRS; dependency injection and bootstrapping |
 
 **Product and UX:** LI at the start of each new wave (re-check the vision, journeys and sequencer) · DOET when building the dashboard, alerts and review queue (chapters on the psychology of everyday actions, and on human error). Check chapter titles against the publishers' tables of contents.
+
+**Exploratory testing (EST), checked against the publisher's table of contents:** ch. 1 "The Case for Software Quality" and ch. 2 "The Case for Manual Testing" (Phase 0, quick reads) · ch. 3 "Exploratory Testing in the Small" (Phase 0–1: user input, state, code paths, user data, environment; the first sessions on the ingest API) · ch. 4 "Exploratory Testing in the Large" (Phase 1–2: the tourist metaphor and the tours, one district at a time) · ch. 5 "Hybrid Exploratory Testing Techniques" (Phase 3–5: scenario-based exploration, varying the BDD scenarios) · ch. 6 "Exploratory Testing in Practice" (Phase 5: how real teams adapted the tours) · ch. 7 "Touring and Testing's Primary Pain Points" (Phase 5–8: flaky tests, regression, test-case churn) · the closing chapter and appendices (testing careers) for interview prep. The book is from 2009, so its examples are desktop and early web apps; apply the tours to APIs, event streams and agents, and pair them with session-based test management (charters, time boxes, debriefs).
 
 **Persistence (ADR-0006):** DDIA ch. 3 (relational vs document models), ch. 4 (storage engines and indexes), ch. 6–8 (replication, sharding, transactions) and ch. 12 (change data capture, the outbox) · APP repository and unit of work · FP data classes for row and document mapping.
 
