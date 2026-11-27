@@ -21,7 +21,7 @@ Agent work also uses `agent-testing`, telemetry work uses `observability-instrum
 - Use current stable APIs only; check versions before adding a dependency.
 
 ## Conventions
-- **Python 3.13** (pinned in `.python-version`): uv workspace; ruff (lint and format); mypy `--strict`; pytest with pytest-asyncio; Pydantic v2; async-first (asyncio, `TaskGroup`, timeouts with `asyncio.timeout`). No blocking I/O on the event loop.
+- **Python 3.15**, the latest stable release (pinned in `.python-version`; move to each new minor once its dependencies ship wheels): uv workspace; ruff (lint and format); mypy `--strict`; pytest with pytest-asyncio; Pydantic v2; async-first (asyncio, `TaskGroup`, timeouts with `asyncio.timeout`). No blocking I/O on the event loop.
 - **TypeScript:** Node.js Active LTS (26, pinned in `.nvmrc`); pnpm workspace; `strict: true`; ESM; eslint; vitest; zod at boundaries; async/await with `AbortSignal` for cancellation.
 - **Architecture:** ports and adapters. Domain code never imports SDKs directly. Adapters for Kafka, AWS, LLMs and MCP live behind interfaces, with in-memory or fake adapters for tests.
 - **LLM providers:** `RecordedProvider` (tests, CI, demo), `ClaudeAgentSdkProvider` and `CodexProvider` (local development with the learner's subscription login, personal use only), `OllamaProvider` (deployment). Never call the Anthropic API with subscription OAuth tokens, and never deploy subscription credentials. They are selected through `LLM_PROVIDER`.
