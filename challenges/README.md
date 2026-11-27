@@ -15,6 +15,7 @@ Phase X · milestone · total time ≈ NN min
 
 ## A — Backend (≈15 min)
 **Goal:** one sentence, the outcome
+**Feature:** F-id and wave, from docs/product/lean-inception.md, plus the journey step it serves
 **Serves:** which goal(s) in docs/GOALS.md and which job requirement
 **Context:** how this builds on yesterday
 **Industry standard:** the practice or standard followed, and why it's today's choice, with 2–3 primary sources linked
@@ -23,6 +24,7 @@ Phase X · milestone · total time ≈ NN min
 **2. Red:** the failing test(s) to write or finish, named after the scenarios
 **3. Green → refactor:** what to implement, plus the pattern to apply and why
 **4. Docs (≈2 min):** the diagram, contract, ADR or README to update
+**UX principle (UI and alert work):** the Norman principle applied (signifier, feedback, mapping, constraint, conceptual model, error design)
 **Done when:** test command(s) pass, and `openspec validate <id> --strict` passes
 **Hints:** collapsed <details>, progressive
 **Docs:** official links, current versions
