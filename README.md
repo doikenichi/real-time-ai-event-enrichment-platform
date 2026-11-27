@@ -53,7 +53,7 @@ Instructions for coding agents live in [AGENTS.md](AGENTS.md), shared by Claude 
 
 | Area | Tools |
 |---|---|
-| Languages | Python 3.13 (uv, ruff, mypy, pytest; pinned in `.python-version`), TypeScript on Node.js 26 LTS (nvm, pnpm, tsc strict, eslint, vitest; pinned in `.nvmrc`) |
+| Languages | Python 3.15 (uv, ruff, mypy, pytest; pinned in `.python-version`), TypeScript on Node.js 26 LTS (nvm, pnpm, tsc strict, eslint, vitest; pinned in `.nvmrc`) |
 | Services | FastAPI, asyncio, Node.js, Next.js / React |
 | Events | Apache Kafka (KRaft), Confluent Schema Registry |
 | AWS (local) | AWS Emulator (SDK work), Floci (Terraform/CI), Moto (unit tests) |
