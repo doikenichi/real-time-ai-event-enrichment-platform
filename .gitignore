@@ -43,3 +43,10 @@ kubeconfig*
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Camera footage and extracted frames (privacy: never commit)
+data/footage/
+*.mp4
+*.mkv
+*.mov
+*.avi
