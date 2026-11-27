@@ -5,8 +5,11 @@ set -euo pipefail
 # Named volumes are created as root; give them to the dev user.
 sudo chown -R "$(id -u):$(id -g)" ~/.claude ~/.codex ~/.cache/uv ~/.local/share/pnpm 2>/dev/null || true
 
-# Python 3.13, managed by uv
-uv python install 3.13
+# Runtime versions come from the standard pin files, so host tools read the same ones:
+#   .python-version → uv (and pyenv or mise on a host)
+#   .nvmrc          → nvm (installed by the node feature; also fnm or mise on a host)
+uv python install            # reads .python-version
+source "${NVM_DIR:-/usr/local/share/nvm}/nvm.sh" && nvm install && nvm alias default "$(cat .nvmrc)"
 
 # CLI tools pinned to the versions checked on 2026-11-27 (bump them through a PR)
 npm install -g \
