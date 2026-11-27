@@ -56,5 +56,8 @@
     "aiven": "Phase 7",
     "render_or_koyeb": "Phase 7",
     "oracle_cloud": "Phase 7"
-  }
+  },
+  "notes": [
+    "Learner can record real footage from own premises for real video analysis and extract frames (ffmpeg). Plan it with F19 (Phase 8): footage stays in git-ignored data/footage/, recorded detector/vision outputs in tests, privacy rules from ADR-0007."
+  ]
 }

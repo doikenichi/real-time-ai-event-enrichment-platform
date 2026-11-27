@@ -77,7 +77,7 @@ Ratings use a 1–3 scale: **E** = effort, **$** = business value, **♥** = UX 
 | F16 | Flaky-test detection and quarantine | G5 | Dev | J5 | 2 | 3 | 1 | 🟡 |
 | F17 | Delivery-health dashboard (DORA metrics) | G5 | Dev | J5 | 2 | 2 | 2 | 🟢 |
 | F18 | PR risk score (rule-based first: diff size, touched areas, test coverage) | G5 | Dev | J5 | 2 | 2 | 1 | 🟢 |
-| F19 | Real detection from Frigate on public sample footage | G3 | Dev | all | 3 | 2 | 2 | 🔴 |
+| F19 | Real detection from Frigate on public sample footage and the learner's own recorded clips (extracted frames) | G3 | Dev | all | 3 | 2 | 2 | 🔴 |
 
 ## 7. Feature Sequencer
 Rules per wave: at most 3 features; at most 1 🔴; at least 1 🟢; E ≤ 5; $ ≥ 4.
