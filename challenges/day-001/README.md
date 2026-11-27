@@ -28,6 +28,8 @@ Each challenge has a starter test. Copy it into place **after** scaffolding (A a
 - [uv workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/)
 - [FastAPI testing](https://fastapi.tiangolo.com/tutorial/testing/) (FastAPI 0.16x; pin the version you install)
 
+**Book reference:** DDIA (2nd ed.), ch. 2, on nonfunctional requirements. Reliability means tolerating faults rather than preventing every one. Separating liveness from readiness is a small fault-tolerance decision: a broken dependency removes the service from traffic instead of causing a restart storm.
+
 **1. Spec (≈3 min):** read `openspec/changes/add-service-health-probes/`. Add the missing scenario: *a readiness check that hangs*. Decide the time budget (for example 1 s), and what the probe answers.
 
 **2. Red (≈4 min):**
@@ -72,6 +74,8 @@ openspec validate add-service-health-probes --strict
 - [Testing Library: query priority (`ByRole` first)](https://testing-library.com/docs/queries/about/#priority)
 - [WCAG 2.2: Use of Color (1.4.1)](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html)
 
+**Book reference:** AIE, ch. 10, "AI Engineering Architecture and User Feedback". The dashboard is where operators will later give feedback on enrichments. Starting with a clear, accessible status component is the first step of that interface.
+
 **1. Spec (≈3 min):** read `openspec/changes/add-dashboard-service-status/`, and add the scenario for an **"unknown"** state (before the first readiness result arrives).
 
 **2. Red (≈6 min):**
@@ -110,6 +114,8 @@ openspec validate add-dashboard-service-status --strict
 - [GitHub: private vulnerability reporting](https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository)
 - [OpenSSF Scorecard checks](https://github.com/ossf/scorecard/blob/main/docs/checks.md)
 
+**Book reference:** DDIA (2nd ed.), ch. 1, "Trade-Offs in Data Systems Architecture". Process and governance are part of the architecture. Today's trade-off is a little friction (PRs only) in exchange for traceability and safety.
+
 **1. Spec (≈2 min):** read `openspec/changes/add-repository-security-baseline/`, and add a requirement for what every PR must confirm (your PR template's checklist).
 
 **2. Red (≈1 min):** `scripts/check-repo-baseline.sh` reports 10 failing checks. This script is the test, written before the configuration exists.
@@ -136,6 +142,13 @@ openspec validate add-repository-security-baseline --strict
 ## Stretch (optional)
 - A: add a `/readyz` detail mode that lists each check's status only when the request comes from localhost.
 - C: store the ruleset as JSON (`.github/rulesets/protect-main.json`), and apply it with `gh api`, as code.
+
+## Reading this week (optional, about 2 × 25 min, outside the 60 min)
+See [docs/READING.md](../../docs/READING.md) for the plan. This week covers Phase 0 foundations:
+1. **DDIA (2nd ed.), ch. 1, "Trade-Offs in Data Systems Architecture", and ch. 2 (nonfunctional requirements).** Focus: what reliability, scalability and maintainability mean, and why percentiles (p95, p99) matter more than averages. You'll use these in the NFR scenarios soon.
+2. **AIE, ch. 1, "Introduction to Building AI Applications with Foundation Models".** Focus: the AI engineering stack, and how AI engineering differs from ML engineering and from full stack engineering.
+
+**Reflection prompt:** which of DDIA's nonfunctional requirements does the readiness probe protect, and what would you measure to prove it? Write 5–10 lines in `docs/reading-notes/ddia.md` once the reading plan PR is merged.
 
 ## Interview drill (optional, ≈5 min, outside the 60 min) · QA/SDET angle
 > **You join a team that has a brand-new microservice with no tests. How do you build its test strategy, and what do you automate first?**
