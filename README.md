@@ -32,6 +32,15 @@ Every weekday at about 17:40 (America/Edmonton), a mentor agent:
 
 See [ROADMAP.md](ROADMAP.md) for the curriculum, [docs/GOALS.md](docs/GOALS.md) for the goals and how they map to the target job, and [challenges/README.md](challenges/README.md) for the challenge format.
 
+## How changes are made: spec → test → code → docs
+
+1. **Spec:** an [OpenSpec](https://github.com/Fission-AI/OpenSpec) change with Given/When/Then scenarios (`openspec/changes/`)
+2. **Test:** TDD, red → green → refactor, with tests named after the scenarios
+3. **Code:** ports and adapters, async-first, current stable APIs
+4. **Docs:** UML and C4 diagrams (Mermaid), OpenAPI and AsyncAPI contracts, arc42 ([docs/architecture](docs/architecture/README.md)), ADRs ([docs/adr](docs/adr/))
+
+Instructions for coding agents live in [AGENTS.md](AGENTS.md), shared by Claude Code and Codex. Workflow skills come from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) and are installed in `.claude/skills/` and `.agents/skills/`.
+
 ## Stack (all free for personal use; open source preferred)
 
 | Area | Tools |
@@ -58,7 +67,12 @@ tests/contract/        cross-service contract tests
 tests/e2e/             Playwright end-to-end tests
 infra/                 compose, terraform, k8s, helm, observability
 .circleci/             CI/CD pipeline
+openspec/              living specs and change proposals (OpenSpec)
+docs/architecture/     arc42 with C4 and UML diagrams
+docs/contracts/        OpenAPI, AsyncAPI, JSON Schemas
 docs/adr/              architecture decision records
+.claude/skills/        shared skills for Claude Code
+.agents/skills/        shared skills for Codex
 challenges/day-NNN/    daily challenges and reviews
 .lab/state.json        lab progress (updated by the mentor)
 ```

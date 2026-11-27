@@ -21,10 +21,13 @@ Target: **Full Stack Developer at Foci Solutions Inc.**, a remote software engin
 | Architecting solutions, client collaboration | ADRs in `docs/adr/`, trade-off write-ups, clear READMEs and runbooks |
 | Maintainability over complexity | Tests at every layer, small reviewed increments, shift-left checks |
 
-## 3. Testing is part of the workflow
+## 3. Spec-driven development, TDD and standard documentation
+Every change follows spec (OpenSpec, Given/When/Then) → test (TDD) → code → docs (UML and C4 in Mermaid, OpenAPI and AsyncAPI, arc42, ADRs). The same workflow skills are shared by Claude Code and Codex.
+
+## 4. Testing is part of the workflow
 Unit, integration, contract, end-to-end, shift-left, disposable test environments, AI agent testing (recorded responses, trajectories, evals, red-teaming, budgets) and telemetry tests.
 
-## 4. AI agents wherever they add value
+## 5. AI agents wherever they add value
 The enricher agent, the ops-agent (AI SRE), test-generation and exploratory e2e agents, LLM-as-judge evals, a CircleCI build-failure agent, PR review, and coding agents. You still write the core code yourself; agents are what you build, test, monitor and work with.
 
 ## Constraints

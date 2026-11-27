@@ -6,9 +6,11 @@ Every weekday has **3 challenges** (A, B, C), each taking 10–20 minutes, at mo
 - **B — Full stack:** TypeScript gateway and the Next.js dashboard, end to end
 - **C — Cloud, DevOps and AI agents:** infrastructure, CI/CD, observability, coding agents, agent testing
 
-Testing is part of every challenge. Most challenges come with a failing test, or ask you to write the test first. Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
+Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
 
 ## Phase 0 — Foundations (about 2 weeks)
+- [ ] Spec-driven setup: `openspec init` (configured for Claude Code and Codex), first capability spec `event-ingest`
+- [ ] Contracts skeleton: `docs/contracts/openapi.yaml`, `asyncapi.yaml`, and the first JSON Schema
 - [ ] Monorepo tooling: uv workspace (Python), pnpm workspace (TypeScript), `.editorconfig`, Makefile or justfile tasks
 - [ ] `ingest-api`: async FastAPI app, `/healthz` and `/readyz`, `POST /events` with Pydantic v2 models, unit tests
 - [ ] Event schema v1 (`EventIn`, `EnrichedEvent`) shared through JSON Schema

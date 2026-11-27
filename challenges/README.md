@@ -5,6 +5,8 @@ Each weekday gets its own folder, `challenges/day-NNN/`:
 - `README.md`: today's 3 challenges, added by the day's pull request
 - `REVIEW.md`: feedback on your work, added by the next day's pull request
 
+Every challenge follows **spec → test → code → docs**, matching the shared skills in `.claude/skills/` and `.agents/skills/`.
+
 ## Format of `README.md`
 
 ```markdown
@@ -14,9 +16,11 @@ Phase X · milestone · total time ≈ NN min
 ## A — Backend (≈15 min)
 **Goal:** one sentence, the outcome
 **Context:** how this builds on yesterday
-**Tasks:** 2–4 concrete steps
-**Done when:** the test command(s) that must pass
-**Patterns and practices:** which pattern and why
+**1. Spec (≈3 min):** review `openspec/changes/<id>/`, and refine one scenario or add the missing edge case
+**2. Red:** the failing test(s) to write or finish, named after the scenarios
+**3. Green → refactor:** what to implement, plus the pattern to apply and why
+**4. Docs (≈2 min):** the diagram, contract, ADR or README to update
+**Done when:** test command(s) pass, and `openspec validate <id> --strict` passes
 **Hints:** collapsed <details>, progressive
 **Docs:** official links, current versions
 
@@ -30,6 +34,7 @@ Phase X · milestone · total time ≈ NN min
 
 ## Rules
 - Challenges only use current stable, non-deprecated APIs. Versions are checked when the challenge is written.
-- Every challenge has an automated "done when" check: a failing test, a command, or a CI job.
+- Every challenge has an automated "done when" check.
+- TDD: commit at each green step (`day-NNN: <behaviour>`), so the review can see red → green → refactor.
 - Reference solutions never appear in the day's challenge. They arrive the next day in `REVIEW.md`.
-- Commit messages: `day-NNN: <summary>` (for example, `day-004: idempotent producer with retry`).
+- After merge, archive the change: `openspec archive <id>`.
