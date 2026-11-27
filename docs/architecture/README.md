@@ -32,7 +32,7 @@ C4Context
 ```
 
 ## 4. Solution strategy
-Event-driven (Kafka), async-first services, ports and adapters, spec-driven development (OpenSpec) with TDD, contracts first (OpenAPI and AsyncAPI), observability by default.
+Event-driven (Kafka), a transactional outbox with CDC, polyglot persistence with a purpose (ADR-0006), async-first services, ports and adapters, spec-driven development (OpenSpec) with TDD, contracts first (OpenAPI and AsyncAPI), observability by default.
 
 ## 5. Building block view
 ```mermaid
@@ -44,10 +44,18 @@ C4Container
     Container(gateway, "gateway", "TypeScript, Node.js", "Streams enriched events")
     Container(dash, "dashboard", "Next.js", "Live view")
     Container(ops, "ops-agent", "Python AI agent", "Investigates alerts")
-    ContainerDb(store, "Storage", "DynamoDB, S3 (emulated)", "Enriched store, raw archive")
-    Rel(ingest, kafka, "produce events.raw")
+    ContainerDb(pg, "PostgreSQL 18", "SQL + pgvector", "Events, idempotency keys, outbox, rules, embeddings")
+    Container(cdc, "Debezium", "Kafka Connect", "Outbox Event Router (CDC)")
+    ContainerDb(store, "Enriched store", "DynamoDB (local) / MongoDB (deployed)", "Enriched events, incident docs")
+    ContainerDb(cache, "Valkey", "In-memory", "Cache, rate limits")
+    ContainerDb(s3, "S3 (emulated)", "Object storage", "Raw archive, replay")
+    Rel(ingest, pg, "insert event + outbox (one transaction)")
+    Rel(pg, cdc, "WAL (logical replication)")
+    Rel(cdc, kafka, "produce events.raw")
     Rel(kafka, enricher, "consume events.raw")
-    Rel(enricher, store, "read/write")
+    Rel(enricher, store, "upsert enriched")
+    Rel(enricher, cache, "rate limit, cache")
+    Rel(enricher, pg, "retrieve (pgvector)")
     Rel(enricher, kafka, "produce events.enriched")
     Rel(kafka, gateway, "consume events.enriched")
     Rel(gateway, dash, "SSE")

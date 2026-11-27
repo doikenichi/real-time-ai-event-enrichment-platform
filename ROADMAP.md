@@ -35,7 +35,9 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Poison events: DLQ with the reason in headers, without blocking the partition; redrive tool and test
 - [ ] Retries: exponential backoff with jitter and capped attempts; a test proving retries plus idempotency give no duplicate effects
 - [ ] Eventual-consistency test helper: poll until the state matches, with an SLO timeout and the last observed state on failure (no sleeps)
-- [ ] Outbox pattern and idempotent processing
+- [ ] PostgreSQL 18 in compose: `ingest-api` persists accepted events and idempotency keys (unique constraint, `INSERT … ON CONFLICT`), with SQLAlchemy 2.x async and Alembic migrations; Testcontainers Postgres tests
+- [ ] Transactional outbox: the event row and outbox row are written in one transaction; Debezium (Kafka Connect) Outbox Event Router publishes to Kafka, keyed by aggregate id. Tests: an outbox row becomes exactly one Kafka message; a rollback publishes nothing; a connector restart creates no lost or out-of-order keys
+- [ ] Outbox pattern and idempotent processing (consumers dedupe by event id)
 - [ ] Integration tests with Testcontainers (Kafka); contract tests for event schemas (including Pact message pacts)
 - [ ] Consumer crash and rebalance test: kill a consumer mid-batch; no loss and no duplicate effects; compare rebalances under the Kafka 4.x consumer group protocol (KIP-848)
 - [ ] Offsets and replay: reset a consumer group to a timestamp and rebuild state with idempotent projections; test that a replay converges
@@ -54,13 +56,17 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] AWS Emulator (Dockerfile, CA cert, generated credentials) and Floci in compose
 - [ ] S3 archive of raw events (async SDK, multipart, presigned URLs)
 - [ ] DynamoDB store for enriched events (single-table design, conditional writes)
+- [ ] `EnrichedEventStore` port with two adapters, DynamoDB and MongoDB, both passing one shared contract test suite (access-pattern-first design: key-value vs document)
+- [ ] MongoDB for ops-agent incident documents: schema validation (`$jsonSchema`), indexes, and data validation and integrity tests
+- [ ] Migrations done safely: expand/contract (backward-compatible) migrations, tested upgrade and downgrade in CI, and zero-downtime rules in an ADR
+- [ ] Database security: least-privilege roles per service, Postgres row-level security per tenant, SQL injection tests, and the Debezium user limited to replication
 - [ ] SQS as the dead-letter queue and redrive
 - [ ] Moto for unit tests; emulators for integration tests
 - [ ] Terraform against Floci: modules, remote state pattern, `terraform test`
 - [ ] IaC scanning with Checkov and Trivy config; least-privilege IAM policies for each service
 - [ ] Ports and adapters: storage interfaces with AWS and in-memory adapters
 - [ ] Downstream validation: assert the DynamoDB and S3 state and the downstream topics, not just API responses
-- [ ] Reconciliation job: counts and checksums across ingested, enriched and stored data per window; as a test and as a scheduled check
+- [ ] Reconciliation job: counts and checksums across Postgres (ingested), Kafka and DynamoDB/MongoDB (enriched) per window; as a test and as a scheduled check
 - [ ] Exactly-once inside Kafka: transactional read-process-write with `read_committed` consumers; a test that aborted transactions are never visible, and why external side effects still need idempotency
 - [ ] Compacted topic for latest-state-per-key (for example enrichment rules), with tombstones and a rebuild test
 - [ ] Same failure modes on SQS (through the emulators): visibility timeout, redrive policy, FIFO deduplication, to show the concepts transfer across brokers
@@ -70,6 +76,8 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 ## Phase 3 — The enricher agent (about 3 weeks)
 - [ ] `LLMProvider` port and adapters: `RecordedProvider`, `ClaudeAgentSdkProvider`, `CodexProvider` (`OllamaProvider` comes later)
 - [ ] Structured output validated with Pydantic
+- [ ] Retrieval for the agent: pgvector embeddings of enrichment reference data in Postgres; tests for recall on a small labelled set (AIE ch. 6)
+- [ ] Valkey for LLM rate limiting (token bucket) and request deduplication; tests for limits under concurrency
 - [ ] Tool calling: lookup tools for DynamoDB, S3 and HTTP; tool errors and timeouts
 - [ ] An MCP server exposing platform tools, with its own contract tests
 - [ ] Agent testing pyramid: tool unit tests → scripted LLM → record/replay → trajectories → evals → red-team → budgets
@@ -91,6 +99,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Kafka share groups (Queues for Kafka, production-ready in 4.2) for parallel enrichment work: acknowledgement, redelivery and delivery-count tests
 - [ ] Distributed-bug metrics and alerts: lag, DLQ rate, retries, duplicates detected, reconciliation mismatches; a runbook for following one id across logs and traces
 - [ ] Load testing with observability: average-load and spike tests (open arrival-rate model), k6 metrics streamed to Prometheus, a Grafana dashboard next to the RED metrics and traces
+- [ ] Database performance: connection pooling, `EXPLAIN ANALYZE` checks on key queries in CI, and k6 scenarios that include the database; Postgres and Valkey metrics in Grafana
 - [ ] Profiling: Pyroscope continuous profiling, plus py-spy and the Node.js CPU profiler; fix one hotspot found under load (with a test-first regression check)
 - [ ] Drift monitoring (DMLS ch. 8): alert on shifts in the input event mix and in the enrichment output distribution
 - [ ] Soak test: detect memory, connection and consumer-lag drift; a runbook for what to watch
@@ -117,6 +126,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 ## Phase 7 — Real deployment (about 3 weeks)
 - [ ] Vercel Hobby: dashboard, with a preview deployment for each PR
 - [ ] Aiven free Kafka (TLS/SASL config, environment-based settings)
+- [ ] Managed databases on free tiers: Neon (Postgres, with a branch per PR as a disposable test database) and MongoDB Atlas Free; the adapter is chosen by configuration; Valkey self-hosted on Oracle
 - [ ] Render or Koyeb: `ingest-api` and `gateway`; ADR on free tiers going to sleep
 - [ ] Oracle Cloud Always Free: Ollama and the enricher (with demo mode as the fallback)
 - [ ] Continuous deployment from CircleCI: approval jobs, smoke tests, rollbacks
