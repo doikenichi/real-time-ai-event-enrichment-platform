@@ -32,6 +32,9 @@ Phase X · milestone · total time ≈ NN min
 ...
 
 ## Stretch (optional)
+
+## Interview drill (optional, ≈5 min, outside the 60 min)
+One question tied to today's work. Answer it in `docs/interview/README.md`, citing today's code as evidence.
 ```
 
 ## Rules
