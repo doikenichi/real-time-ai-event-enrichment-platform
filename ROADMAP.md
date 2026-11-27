@@ -20,9 +20,13 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] `ingest-api`: async FastAPI app, `/healthz` and `/readyz`, `POST /events` with Pydantic v2 models, unit tests
 - [ ] Event schema v1 for the surveillance domain (`CameraDetection`, `CameraHeartbeat`, `Incident`) shared through JSON Schema; privacy rule: no identity fields in any schema
 - [ ] `web/dashboard`: Next.js app with strict TypeScript and a first component test (vitest + Testing Library)
+- [x] Dev container (mentor-provided, ADR-0011): one `.devcontainer/` for every machine and Codespaces; host needs only git, Docker and an editor (`docs/how-to/develop-on-any-machine.md`)
+- [ ] Dev container as code: Dependabot for the `devcontainers` and `docker` ecosystems, a `devcontainer-lock.json`, and a CircleCI job that builds the container and runs a smoke test (`uv --version`, `pnpm --version`, `docker info`)
 - [ ] Shift left: pre-commit with ruff, mypy, eslint, tsc, gitleaks, hadolint
 - [ ] Docker: multi-stage, non-root images for `ingest-api`, health checks
 - [ ] CircleCI: first pipeline (lint → unit tests), caching, test results (JUnit) stored as artifacts
+- [ ] Test results as data (ADR-0009): every runner writes JUnit for CircleCI plus CTRF JSON (pytest, Vitest, Playwright), stored as artifacts
+- [ ] Allure 3 report for every CircleCI run (all levels, BDD steps and attachments, categories for known failure types), stored as an artifact; history carried between runs
 - [ ] ADR-0005: monorepo layout and tooling
 - [ ] First exploratory session (EST ch. 3): charter and session sheet for `ingest-api` health and `POST /events`, varying input, state and environment; bugs become regression scenarios
 - [ ] Threat model v0: STRIDE for the ingest flow, plus a data-flow diagram in arc42 §11
@@ -120,6 +124,8 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] BDD e2e against the full compose stack: Gherkin features from the spec scenarios, playwright-bdd (web) and pytest-bdd (API and event flows), `@smoke` and `@regression` suites in CircleCI, with the HTML report as living documentation
 - [ ] Disposable environment for each CircleCI pipeline: bring the stack up → test → tear it down
 - [ ] kind cluster, Kubernetes manifests, then Helm charts
+- [ ] GitOps with Argo CD (ADR-0010; reference lab: brunobml/gitops-control-plane): self-managed Argo CD on the local cluster syncing `infra/gitops/`; CircleCI updates image tags by PR; an ApplicationSet pull-request generator creates one preview namespace per open PR; sync waves and health checks; rollback by revert
+- [ ] ReportPortal (ADR-0009), self-hosted on the local cluster through Argo CD: every pipeline publishes results (non-fatal); triage states for failures; compare its auto-analysis and flaky detection with our CI failure explainer and flaky score on the same runs
 - [ ] Image scanning with Trivy, SBOMs, and test splitting in CircleCI
 - [ ] Performance gate in CircleCI: load and spike tests in the disposable environment, compared with a stored baseline; a regression fails the build
 - [ ] Stress and breakpoint tests on kind, horizontal pod autoscaling (HPA), and a capacity-planning ADR (where it saturates and why)
@@ -136,6 +142,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Build-insights domain as a second tenant: a webhook receiver for GitHub (`X-Hub-Signature-256` HMAC, `X-GitHub-Delivery` dedupe) and CircleCI (`circleci-signature` HMAC-SHA256, payload `id` dedupe) into Kafka. Acceptance test: no changes to the core services
 - [ ] CI failure explainer agent: classifies failures as code, test, flaky or infrastructure, with evidence, and comments on the PR
 - [ ] DORA metrics dashboard (lead time, deployment frequency, time to restore, change failure rate, rework rate), computed from this repo's own events
+- [ ] Testing indicators (ADR-0009, F17), from the CTRF history: pass rate, flaky rate and score, duration trends per level, coverage and mutation score trends, spec scenarios with a BDD test, escaped defects with the level that should have caught them, exploratory session findings, time to fix a red build; Prometheus series, a Grafana dashboard and alerts on regressions; a test-insights agent that explains the week's trends
 
 ## Phase 6 — The ops-agent, an AI SRE (about 2 weeks)
 - [ ] Grafana alert webhook → `ops-agent`

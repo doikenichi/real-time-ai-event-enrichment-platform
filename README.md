@@ -58,11 +58,13 @@ Instructions for coding agents live in [AGENTS.md](AGENTS.md), shared by Claude 
 | Events | Apache Kafka (KRaft), Confluent Schema Registry |
 | AWS (local) | AWS Emulator (SDK work), Floci (Terraform/CI), Moto (unit tests) |
 | AI | Claude Agent SDK and Codex (local dev, subscription login), Ollama (deployment), recorded responses (tests), MCP |
-| Testing | pytest, vitest, Testcontainers, contract tests, Playwright with BDD (playwright-bdd, pytest-bdd), promptfoo / DeepEval |
+| Testing | pytest, vitest, Testcontainers, contract tests, Playwright with BDD (playwright-bdd, pytest-bdd), exploratory sessions, promptfoo / DeepEval |
 | Performance and NFRs | k6 (with its MCP server), Locust, Kafka perf tools, Pyroscope, Toxiproxy, Chaos Mesh, Lighthouse CI, axe-core |
 | Data | PostgreSQL 18 (with pgvector), Alembic, Debezium (CDC and outbox), DynamoDB (local) and MongoDB, Valkey |
+| Test reporting | CTRF (common results format), Allure Report 3, ReportPortal (self-hosted), testing indicators in Grafana |
 | Observability | OpenTelemetry, Grafana LGTM (Prometheus, Loki, Tempo), Langfuse |
-| Delivery | Docker, Terraform, kind, Kubernetes, Helm, CircleCI, Trivy, gitleaks, pre-commit |
+| Dev environment | Dev container (`.devcontainer/`), GitHub Codespaces as fallback |
+| Delivery | Docker, Terraform, kind, Kubernetes, Helm, Argo CD (GitOps), CircleCI, Trivy, gitleaks, pre-commit |
 | Deployment | Vercel Hobby, Aiven Kafka free tier, Render / Koyeb, Oracle Cloud Always Free |
 
 ## Repository layout
@@ -76,6 +78,7 @@ web/dashboard/         Next.js live dashboard
 tests/contract/        cross-service contract tests
 tests/e2e/             BDD end-to-end tests (Gherkin features, playwright-bdd, pytest-bdd)
 infra/                 compose, terraform, k8s, helm, observability
+.devcontainer/         the development environment for every machine
 .circleci/             CI/CD pipeline
 openspec/              living specs and change proposals (OpenSpec)
 docs/architecture/     arc42 with C4 and UML diagrams
