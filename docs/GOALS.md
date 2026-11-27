@@ -27,7 +27,13 @@ Every change follows spec (OpenSpec, Given/When/Then) → test (TDD) → code �
 ## 4. Testing is part of the workflow
 Unit, integration, contract, end-to-end, shift-left, disposable test environments, AI agent testing (recorded responses, trajectories, evals, red-teaming, budgets) and telemetry tests.
 
-## 5. AI agents wherever they add value
+## 5. Secure by default
+Repo rulesets, secret scanning, Dependabot, SAST (CodeQL, Semgrep), supply chain (SBOM, signing, Scorecard), IaC and container scanning, DAST, STRIDE threat modeling, and the OWASP Top 10 for web, API and LLM applications.
+
+## 6. Every lab reflects current industry standards
+Before proposing a lab, the mentor researches current industry standards and best practices: official docs, OWASP, NIST, CNCF, OpenSSF, Thoughtworks Technology Radar, vendor engineering blogs and recent job postings. Each challenge says which standard it follows, cites its sources, and names the goal it serves.
+
+## 7. AI agents wherever they add value
 The enricher agent, the ops-agent (AI SRE), test-generation and exploratory e2e agents, LLM-as-judge evals, a CircleCI build-failure agent, PR review, and coding agents. You still write the core code yourself; agents are what you build, test, monitor and work with.
 
 ## Constraints

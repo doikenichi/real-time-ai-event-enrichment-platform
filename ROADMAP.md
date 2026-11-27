@@ -6,9 +6,12 @@ Every weekday has **3 challenges** (A, B, C), each taking 10–20 minutes, at mo
 - **B — Full stack:** TypeScript gateway and the Next.js dashboard, end to end
 - **C — Cloud, DevOps and AI agents:** infrastructure, CI/CD, observability, coding agents, agent testing
 
-Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
+Every challenge follows **spec → test → code → docs**: an OpenSpec change with Given/When/Then scenarios, TDD (red → green → refactor), then updated UML/C4 diagrams, contracts and ADRs. The shared skills from [spec-driven-tdd-agent-skills](https://github.com/doikenichi/spec-driven-tdd-agent-skills) guide each step. Security is secure-by-default from day 1 (skill `security-hardening`). Phases are guides, not deadlines. The mentor moves to the next milestone only once the current one is done.
 
 ## Phase 0 — Foundations (about 2 weeks)
+- [ ] Repo security baseline: a ruleset on `main` (PRs only, no force pushes or deletion, conversation resolution), squash merge only, delete branches after merge, disable unused features
+- [ ] `SECURITY.md` and private vulnerability reporting; review the secret scanning and push protection settings (with custom patterns)
+- [ ] `CODEOWNERS`, a PR template with a security checklist, issue templates (bug, feature, security hardening)
 - [ ] Spec-driven setup: `openspec init` (configured for Claude Code and Codex), first capability spec `event-ingest`
 - [ ] Contracts skeleton: `docs/contracts/openapi.yaml`, `asyncapi.yaml`, and the first JSON Schema
 - [ ] Monorepo tooling: uv workspace (Python), pnpm workspace (TypeScript), `.editorconfig`, Makefile or justfile tasks
@@ -18,7 +21,8 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Shift left: pre-commit with ruff, mypy, eslint, tsc, gitleaks, hadolint
 - [ ] Docker: multi-stage, non-root images for `ingest-api`, health checks
 - [ ] CircleCI: first pipeline (lint → unit tests), caching, test results
-- [ ] ADR-0003: monorepo layout and tooling
+- [ ] ADR-0005: monorepo layout and tooling
+- [ ] Threat model v0: STRIDE for the ingest flow, plus a data-flow diagram in arc42 §11
 
 ## Phase 1 — Event backbone (about 2 weeks)
 - [ ] `infra/compose.yaml`: Kafka (KRaft) and Schema Registry
@@ -29,6 +33,10 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] `gateway` (TypeScript): Kafka consumer → Server-Sent Events, backpressure, AbortController
 - [ ] Dashboard: live event list over SSE, with reconnects
 - [ ] CircleCI: integration job on the `machine` executor
+- [ ] Dependency security: Dependabot alerts and security updates; `dependabot.yml` for uv, npm/pnpm, docker and github-actions; license allow-list check
+- [ ] SAST: CodeQL (security-extended) for Python and TypeScript; Semgrep in CircleCI with a severity gate; ruff `S` rules and eslint security rules
+- [ ] The ruleset requires the CI checks to pass before merge
+- [ ] API security: input validation tests with malicious payloads, rate limiting, CORS allow-list, security headers (OWASP API Top 10)
 
 ## Phase 2 — AWS, locally (about 2 weeks)
 - [ ] AWS Emulator (Dockerfile, CA cert, generated credentials) and Floci in compose
@@ -37,6 +45,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] SQS as the dead-letter queue and redrive
 - [ ] Moto for unit tests; emulators for integration tests
 - [ ] Terraform against Floci: modules, remote state pattern, `terraform test`
+- [ ] IaC scanning with Checkov and Trivy config; least-privilege IAM policies for each service
 - [ ] Ports and adapters: storage interfaces with AWS and in-memory adapters
 
 ## Phase 3 — The enricher agent (about 3 weeks)
@@ -48,6 +57,7 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Eval suite (promptfoo or DeepEval) with a baseline gate in CircleCI
 - [ ] Langfuse (self-hosted) traces, datasets and scores
 - [ ] Prompt-injection guardrails for event payloads
+- [ ] OWASP Top 10 for LLM applications: tool allow-lists, output handling, spend limits, no secrets in prompts or logs; red-team suite in CI
 
 ## Phase 4 — Observability (about 2 weeks)
 - [ ] Structured logging: structlog (Python), pino (TypeScript), correlation IDs
@@ -62,6 +72,8 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Disposable environment for each CircleCI pipeline: bring the stack up → test → tear it down
 - [ ] kind cluster, Kubernetes manifests, then Helm charts
 - [ ] Image scanning with Trivy, SBOMs, and test splitting in CircleCI
+- [ ] Supply chain: SBOMs (CycloneDX) for every image, keyless cosign signing and attestation, actions and orbs pinned by SHA, OpenSSF Scorecard with a badge
+- [ ] Kubernetes security: Pod Security Standards (restricted), securityContext, NetworkPolicies, resource limits; Checkov for manifests and Helm
 
 ## Phase 6 — The ops-agent, an AI SRE (about 2 weeks)
 - [ ] Grafana alert webhook → `ops-agent`
@@ -77,10 +89,13 @@ Every challenge follows **spec → test → code → docs**: an OpenSpec change 
 - [ ] Oracle Cloud Always Free: Ollama and the enricher (with demo mode as the fallback)
 - [ ] Continuous deployment from CircleCI: approval jobs, smoke tests, rollbacks
 - [ ] Playwright against preview URLs; production monitoring and uptime checks
+- [ ] DAST: OWASP ZAP baseline scan against preview and production URLs in CircleCI
+- [ ] Secrets in each platform's secret store, rotation runbook, least-privilege deploy tokens
 
 ## Phase 8 — Agents everywhere, and polish (about 2 weeks)
 - [ ] Test-generation agent (you review its output), and exploratory e2e through Playwright MCP
 - [ ] CircleCI build-failure explainer agent and a PR review agent
-- [ ] Coding-agent workflows: CLAUDE.md, delegating, reviewing diffs (Claude Code, Codex, Copilot)
+- [ ] Coding-agent workflows: AGENTS.md and shared skills, delegating, reviewing diffs (Claude Code, Codex, Copilot)
 - [ ] Local Ollama optimization (nice to have): model comparison on the eval suite
+- [ ] Security review: an OWASP ASVS level 1 self-assessment, threat model refresh, Scorecard ≥ 7
 - [ ] Portfolio README, architecture diagram, demo script, and job-interview talking points
