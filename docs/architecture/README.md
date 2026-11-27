@@ -66,7 +66,18 @@ C4Container
 See [docs/adr/](../adr/).
 
 ## 10. Quality requirements
-*TBD:* quality scenarios, for example "99% of events are enriched in under 5 s".
+Quality scenarios are measurable NFRs, tested automatically (skill `performance-and-nfr-testing`). The table grows as challenges add them.
+
+| ID | Quality | Scenario | Target | Test |
+|---|---|---|---|---|
+| QS-1 | Latency | Valid events POSTed at the expected rate | p95 < 150 ms, p99 < 400 ms, errors < 0.1% | k6 load (`tests/perf/`) *TBD* |
+| QS-2 | Freshness | An event is enriched and visible on the dashboard | 99% in < 5 s end to end | k6 + trace timing *TBD* |
+| QS-3 | Resilience | The LLM provider times out for 60 s | No lost events; DLQ or retry; recovery < 2 min | Toxiproxy fault test *TBD* |
+| QS-4 | Stability | Expected load for 60 min | No memory, connection or lag drift | k6 soak *TBD* |
+| QS-5 | Web performance | Dashboard first load | LCP < 2.5 s, INP < 200 ms, CLS < 0.1 | Lighthouse CI *TBD* |
+| QS-6 | Accessibility | Dashboard pages | WCAG 2.2 AA, no axe violations | axe-core + Playwright *TBD* |
+
+The targets are starting points, refined from SLOs as the platform grows.
 
 ## 11. Risks and technical debt
 - Free tiers change without notice; their limits are checked again before deployment work.
