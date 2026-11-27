@@ -75,7 +75,7 @@ Ratings use a 1–3 scale: **E** = effort, **$** = business value, **♥** = UX 
 | F14 | Signed GitHub and CircleCI webhook ingestion (second tenant) | G5 | Dev | J5 | 2 | 2 | 1 | 🟢 |
 | F15 | CI failure explainer, as a PR comment | G5 | Dev | J5 | 2 | 3 | 2 | 🟡 |
 | F16 | Flaky-test detection and quarantine | G5 | Dev | J5 | 2 | 3 | 1 | 🟡 |
-| F17 | Delivery-health dashboard (DORA metrics) | G5 | Dev | J5 | 2 | 2 | 2 | 🟢 |
+| F17 | Delivery and test health dashboard: DORA metrics plus testing indicators (pass and flaky rates, durations, coverage, escaped defects, time to fix a red build) | G5 | Dev | J5 | 3 | 3 | 2 | 🟢 |
 | F18 | PR risk score (rule-based first: diff size, touched areas, test coverage) | G5 | Dev | J5 | 2 | 2 | 1 | 🟢 |
 | F19 | Real detection from Frigate on public sample footage and the learner's own recorded clips (extracted frames) | G3 | Dev | all | 3 | 2 | 2 | 🔴 |
 
@@ -90,7 +90,7 @@ Rules per wave: at most 3 features; at most 1 🔴; at least 1 🟢; E ≤ 5; $ 
 | 4 | F9 · F10 · F11 | 5 | 6 | 3–4 |
 | 5 | F12 · F13 | 5 | 4 | 3, 6 |
 | 6 | F14 · F15 | 4 | 5 | 5 |
-| 7 | F16 · F17 | 4 | 5 | 5 |
+| 7 | F16 · F17 | 5 | 6 | 5 |
 | 8 | F18 · F19 | 5 | 4 | 8 |
 
 **MVP = waves 1–3:** Maya receives a few deduplicated, explained incidents from her cameras, private by design. This completes journeys J2 and J4, and most of J1.
