@@ -15,7 +15,9 @@ Phase X · milestone · total time ≈ NN min
 
 ## A — Backend (≈15 min)
 **Goal:** one sentence, the outcome
+**Serves:** which goal(s) in docs/GOALS.md and which job requirement
 **Context:** how this builds on yesterday
+**Industry standard:** the practice or standard followed, and why it's today's choice, with 2–3 primary sources linked
 **1. Spec (≈3 min):** review `openspec/changes/<id>/`, and refine one scenario or add the missing edge case
 **2. Red:** the failing test(s) to write or finish, named after the scenarios
 **3. Green → refactor:** what to implement, plus the pattern to apply and why
@@ -33,7 +35,8 @@ Phase X · milestone · total time ≈ NN min
 ```
 
 ## Rules
-- Challenges only use current stable, non-deprecated APIs. Versions are checked when the challenge is written.
+- Challenges are researched before they're written: current industry standards, primary sources, and current stable, non-deprecated APIs and versions.
+- Security is part of the definition of done (the `security-hardening` checklist).
 - Every challenge has an automated "done when" check.
 - TDD: commit at each green step (`day-NNN: <behaviour>`), so the review can see red → green → refactor.
 - Reference solutions never appear in the day's challenge. They arrive the next day in `REVIEW.md`.
