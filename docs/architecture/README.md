@@ -3,7 +3,7 @@
 This is a living document, updated in the same PR as the code (see the `architecture-docs` skill). Sections marked *TBD* are filled in as the platform grows.
 
 ## 1. Introduction and goals
-Ingest events, enrich them in real time with AI agents, and stream the results to a live dashboard.
+An AI brain for event streams (see [PRODUCT.md](../PRODUCT.md)). The primary product is a **smart surveillance brain**: it turns camera detections into a few explained incidents, privacy by design. The second domain is **build insights** from GitHub and CircleCI events.
 
 Top quality goals:
 1. **Reliability:** no lost or duplicated events (idempotency, DLQ, at-least-once with idempotent consumers)
@@ -19,13 +19,15 @@ Top quality goals:
 ## 3. Context and scope
 ```mermaid
 C4Context
-    title System context — real-time AI event enrichment platform
-    Person(user, "Operator", "Watches enriched events live")
-    System_Ext(producer, "Event producers", "Apps and webhooks sending events")
-    System(platform, "Enrichment platform", "Ingests, enriches with AI, streams")
+    title System context — AI brain for event streams
+    Person(user, "Operator / reviewer", "Watches incidents, reviews alerts")
+    System_Ext(cams, "Cameras and sensors", "Simulator, MQTT, Frigate (optional)")
+    System_Ext(ci, "GitHub and CircleCI", "Webhooks (build insights)")
+    System(platform, "Event brain platform", "Correlates, enriches with AI, streams incidents")
     System_Ext(llm, "LLM provider", "Claude / OpenAI (dev), Ollama (deploy)")
     System_Ext(obs, "Observability", "Grafana LGTM, Langfuse")
-    Rel(producer, platform, "POST /events", "HTTPS/JSON")
+    Rel(cams, platform, "Detections, heartbeats", "MQTT/HTTPS")
+    Rel(ci, platform, "Signed webhooks", "HTTPS")
     Rel(platform, llm, "Prompts, tool calls")
     Rel(platform, user, "Live stream", "SSE")
     Rel(platform, obs, "Traces, metrics, logs", "OTLP")
@@ -97,3 +99,8 @@ The targets are starting points, refined from SLOs as the platform grows.
 | Enrichment | Adding AI-derived fields (classification, summary, entities) to an event |
 | DLQ | Dead-letter queue/topic for events that failed processing |
 | Spec delta | An OpenSpec change describing added, modified or removed requirements |
+| Detection | A single camera observation (for example "person, 0.91, back door"); never identifies who |
+| Incident | A correlated, deduplicated group of detections with a severity and an explanation |
+| Heartbeat | A periodic "camera alive" event; a gap means the camera is offline |
+| Event time / processing time | When something happened at the camera vs when the platform saw it; they differ because of clock skew and delays |
+| Tenant / domain | A product plugged into the shared engine (surveillance, build insights), isolated by row-level security |

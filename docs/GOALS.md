@@ -1,5 +1,7 @@
 # Goals
 
+**What we're building:** an AI brain for event streams, with two products (see [PRODUCT.md](PRODUCT.md)). The primary one is a **smart surveillance brain** that turns camera detections into a few explained incidents, privacy by design. The second domain is **build insights** from GitHub and CircleCI events, dogfooding this repo's own build system.
+
 ## 1. Level up through deliberate daily practice
 - **Python and TypeScript**, with a strong focus on **async**: asyncio, TaskGroup, structured concurrency, cancellation, backpressure; Promises, AbortController and streams in Node.js.
 - **Industry design patterns and best practices**: ports and adapters (hexagonal architecture), repository, strategy, dependency injection, outbox, retry with backoff and jitter, circuit breaker, idempotency, CQRS where it fits.
@@ -44,7 +46,10 @@ A core skill to learn and to talk about with confidence: *"How would you approac
 ## 9. Learn from the canon, and apply it
 Get the most out of eight books by reading just in time and applying each idea in the platform the same week. For systems and AI: *Designing Data-Intensive Applications* (2nd ed.), *AI Engineering*, *Designing Machine Learning Systems*, *Machine Learning System Design Interview* and *Inference Engineering*. For the languages and design: *Node.js Design Patterns* (4th ed.), *Fluent Python* (2nd ed.) and *Architecture Patterns with Python*. The plan is in `docs/READING.md`, and notes in your own words go in `docs/reading-notes/`. Every challenge links to a chapter, and interview answers cite the concepts.
 
-## 10. AI agents wherever they add value
+## 10. Build a robust build system, and measure it
+CircleCI pipelines that are fast, reliable and secure: path-filtered builds for the monorepo (only what changed), caching, test splitting by timing, flaky-test detection and quarantine, reproducible builds (lockfiles, pinned toolchains and image digests), disposable environments, supply-chain security, build observability (pipeline traces and metrics), build-time SLOs, and DORA's delivery metrics. The build-insights domain analyses this repo's own builds.
+
+## 11. AI agents wherever they add value
 The enricher agent, the ops-agent (AI SRE), test-generation and exploratory e2e agents, LLM-as-judge evals, a CircleCI build-failure agent, PR review, and coding agents. You still write the core code yourself; agents are what you build, test, monitor and work with.
 
 ## Constraints
