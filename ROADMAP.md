@@ -1,5 +1,7 @@
 # Roadmap
 
+**What to build** is decided by the Lean Inception Feature Sequencer in [docs/product/lean-inception.md](docs/product/lean-inception.md). The MVP is waves 1–3. This roadmap lists the **technical milestones** those features need, by phase. **How it should feel** follows [docs/ux/PRINCIPLES.md](docs/ux/PRINCIPLES.md) (Don Norman).
+
 Every weekday has **3 challenges** (A, B, C), each taking 10–20 minutes, at most 60 minutes in total. The tracks rotate so that every area moves forward every day:
 
 - **A — Backend:** Python and async services, Kafka, AWS SDK, agents

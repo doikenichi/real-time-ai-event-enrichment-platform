@@ -1,5 +1,7 @@
 # Product
 
+> Planning artifacts (vision, is/is not, goals, personas, journeys, feature review, Feature Sequencer, MVP Canvas) are in **[product/lean-inception.md](product/lean-inception.md)**. UX rules are in **[ux/PRINCIPLES.md](ux/PRINCIPLES.md)**.
+
 The platform is an **AI "brain" for event streams**. It's one engine with two products on top, each a domain (tenant) that plugs into the same pipeline:
 
 1. **Smart surveillance brain** (primary, from Phase 1): turns raw camera detections into a few meaningful, explained incidents.
