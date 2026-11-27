@@ -1,4 +1,4 @@
-# Reading plan: five books, applied to this platform
+# Reading plan: eight books, applied to this platform
 
 Read a little, just in time, and apply it the same week. The mentor assigns reading that matches the current milestone, links each challenge to a chapter, and checks your notes (skill `reading-companion`).
 
@@ -9,6 +9,16 @@ Read a little, just in time, and apply it the same week. The mentor assigns read
 | **DMLS** | *Designing Machine Learning Systems*, Chip Huyen (O'Reilly, 2022) | ML in production: data, features, deployment, drift, monitoring, testing in production, MLOps |
 | **MLSDI** | *Machine Learning System Design Interview*, Ali Aminian and Alex Xu (ByteByteGo, 2023) | A repeatable framework for ML and AI system design interviews, plus case studies |
 | **IE** | *Inference Engineering*, Philip Kiely (Baseten Books, 2026; free to read online at baseten.co) | Serving models: GPU and memory fundamentals, inference engines, KV cache, quantization, batching, autoscaling |
+
+**Language and design books** (how to write the code well, in each language):
+
+| Short name | Book | Why it matters here |
+|---|---|---|
+| **NodeDP** | *Node.js Design Patterns*, 4th ed., Luciano Mammino and Mario Casciaro (Packt, 2025) | The TypeScript side: the gateway, async control flow, streams and backpressure, GoF patterns in JavaScript, testing, scalability and messaging. Updated for Node.js 24, ESM and TypeScript. Companion code: your fork `doikenichi/Node.js-Design-Patterns-Fourth-Edition` |
+| **FP** | *Fluent Python*, 2nd ed., Luciano Ramalho (O'Reilly, 2022) | Idiomatic modern Python: the data model, protocols, type hints, decorators, context managers, and concurrency with async/await |
+| **APP** | *Architecture Patterns with Python* ("Cosmic Python"), Harry Percival and Bob Gregory (O'Reilly, 2020; free to read online at cosmicpython.com) | The Python equivalent of a patterns book for this platform: ports and adapters, repository, unit of work, aggregates, events and message bus, CQRS and dependency injection, all test-driven |
+
+*Why two Python books:* Fluent Python teaches the **language** (the counterpart to NodeDP's platform chapters), and Architecture Patterns with Python teaches the **architecture patterns** (the counterpart to NodeDP's design-pattern chapters), using exactly the patterns this platform uses. APP is from 2020, so its examples use older Flask and SQLAlchemy APIs; the patterns hold, and you implement them with FastAPI and current libraries.
 
 *If you meant a different "Inference Engineering" book (for example the Manning compilation), tell the mentor, and it will remap.*
 
@@ -33,6 +43,19 @@ Chapter numbers come from each publisher's table of contents. For IE, the mentor
 | **6 Ops agent** | AI SRE, multi-agent, chaos drills as evals | AIE ch. 6 (agents and their evaluation) again · ch. 4 (building an evaluation pipeline) · DMLS ch. 8 (monitoring and observability) |
 | **7 Real deployment** | Ollama on free tiers, CD, canary, smoke tests | IE (inference fundamentals, engines, quantization, KV cache, batching, autoscaling) · AIE ch. 9 "Inference Optimization" · DMLS ch. 7 "Model Deployment and Prediction Service" · ch. 9 "Continual Learning and Test in Production" (shadow, canary, A/B) |
 | **8 Agents everywhere and polish** | agents in CI, Ollama optimization, interview readiness | IE (performance tuning and benchmarking) · AIE ch. 7 "Finetuning" and ch. 8 "Dataset Engineering" (when *not* to finetune; eval datasets) · DMLS ch. 11 "The Human Side of Machine Learning" · DDIA ch. 14 "Doing the Right Thing" · MLSDI (the whole framework and case studies, as drills) |
+
+### Language and design books, by phase
+NodeDP chapter numbers 1–4 and 10–13 are checked against Packt's table of contents. For chapters 5–9 (promises and async/await, streams, and the creational, structural and behavioral patterns), the mentor confirms the numbers before citing them. For FP and APP, the mentor checks against the O'Reilly tables of contents and cosmicpython.com.
+
+| Phase | NodeDP (TypeScript side) | FP (Python language) | APP (Python architecture) |
+|---|---|---|---|
+| **0** | ch. 1 "The Node.js Platform" (event loop, non-blocking I/O) · ch. 2 "The Module System" (ESM) | the Python data model; data class builders | introduction and the chapter on coupling and abstractions (why `create_app` injects its checks) |
+| **1** | ch. 3 "Callbacks and Events" · ch. 4 async control flow patterns · promises and async/await · streams (the SSE gateway and backpressure) · ch. 13 "Messaging and Integration Patterns" | concurrency models; asynchronous programming (asyncio, TaskGroup, cancellation) | events and the message bus; commands and handlers; using events to integrate microservices |
+| **2** | the creational and structural patterns (factory, adapter, proxy for the storage clients) | interfaces, protocols and ABCs (`typing.Protocol` for ports) | repository pattern; unit of work; aggregates and consistency boundaries |
+| **3** | the behavioral patterns (strategy, middleware, command) | type hints in depth; design patterns with first-class functions (strategy for LLM providers) | the service layer; domain modelling for the enrichment rules |
+| **4** | — | decorators and closures (instrumentation); context managers (spans, timeouts) | — |
+| **5** | ch. 10 "Testing: Patterns and Best Practices" · ch. 12 "Scalability and Architectural Patterns" | — | TDD "in high gear and low gear" (which level to test at) |
+| **7–8** | ch. 11 "Advanced Recipes" (cancellation, batching and caching of async work) | — | CQRS; dependency injection and bootstrapping |
 
 **MLSDI runs alongside every phase:** its first chapter's framework (clarify requirements → frame as an ML task → data → model → evaluation → deployment and serving → monitoring) becomes a weekly design drill. Its case-study chapters are practised one per drill, each re-told with this platform's components.
 
