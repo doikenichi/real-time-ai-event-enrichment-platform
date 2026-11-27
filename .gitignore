@@ -1,0 +1,45 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Node / TypeScript
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+.turbo/
+
+# Testing
+playwright-report/
+test-results/
+junit*.xml
+
+# Infra
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl.bak
+kubeconfig*
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

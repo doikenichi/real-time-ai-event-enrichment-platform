@@ -1,0 +1,6 @@
+{
+  "source": "https://github.com/doikenichi/spec-driven-tdd-agent-skills",
+  "commit": "7a3110e68ec3d11280259134979ed2854c95b288",
+  "installed_to": [".claude/skills", ".agents/skills"],
+  "update_command": "npx skills add doikenichi/spec-driven-tdd-agent-skills --all -a claude-code -a codex"
+}

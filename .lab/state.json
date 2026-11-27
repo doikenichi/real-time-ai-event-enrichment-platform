@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "current_day": 0,
+  "next_day": 1,
+  "phase": 0,
+  "milestone": "Monorepo tooling",
+  "timezone": "America/Edmonton",
+  "last_reviewed_commit": null,
+  "days": [],
+  "carry_over": [],
+  "skills_to_reinforce": [],
+  "accounts_needed": {
+    "circleci": "needed in Phase 0 (sign in with GitHub, enable this repo)",
+    "vercel": "Phase 7",
+    "aiven": "Phase 7",
+    "render_or_koyeb": "Phase 7",
+    "oracle_cloud": "Phase 7"
+  }
+}
