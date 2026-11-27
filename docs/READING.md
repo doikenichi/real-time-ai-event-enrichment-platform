@@ -27,7 +27,7 @@ Read a little, just in time, and apply it the same week. The mentor assigns read
 
 | Short name | Book | Why it matters here |
 |---|---|---|
-| **NodeDP** | *Node.js Design Patterns*, 4th ed., Luciano Mammino and Mario Casciaro (Packt, 2025) | The TypeScript side: the gateway, async control flow, streams and backpressure, GoF patterns in JavaScript, testing, scalability and messaging. Updated for Node.js 24, ESM and TypeScript. Companion code: your fork `doikenichi/Node.js-Design-Patterns-Fourth-Edition` |
+| **NodeDP** | *Node.js Design Patterns*, 4th ed., Luciano Mammino and Mario Casciaro (Packt, 2025) | The TypeScript side: the gateway, async control flow, streams and backpressure, GoF patterns in JavaScript, testing, scalability and messaging. Updated for Node.js 24, ESM and TypeScript; this platform runs Node.js 26 LTS, so check the Node.js changelog when an example uses an API that changed. Companion code: your fork `doikenichi/Node.js-Design-Patterns-Fourth-Edition` |
 | **FP** | *Fluent Python*, 2nd ed., Luciano Ramalho (O'Reilly, 2022) | Idiomatic modern Python: the data model, protocols, type hints, decorators, context managers, and concurrency with async/await |
 | **APP** | *Architecture Patterns with Python* ("Cosmic Python"), Harry Percival and Bob Gregory (O'Reilly, 2020; free to read online at cosmicpython.com) | The Python equivalent of a patterns book for this platform: ports and adapters, repository, unit of work, aggregates, events and message bus, CQRS and dependency injection, all test-driven |
 
