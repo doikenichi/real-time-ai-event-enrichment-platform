@@ -1,10 +1,10 @@
 # Day 001 feedback
 
-Fill this in when you stop for the day (2 minutes). Rough numbers are fine. The mentor reads it before anything else, and it wins over the commit metrics when they disagree.
+Fill this in when you stop for the day (2 minutes). Rough numbers are fine: "at least 2.5 h", "1–2 h" or "most of the evening" all work. Nobody tracks minutes while learning. The mentor reads it before anything else, and it wins over the commit metrics when they disagree.
 
-| Challenge | Status (done / partial / not started) | Minutes (your estimate, including reading and setup) | Difficulty (1 easy – 5 lost) | Instructions clear? (1 confusing – 5 clear) | Hints opened |
+| Challenge | Status (done / partial / not started) | Time, roughly (including reading and setup) | Difficulty (1 easy – 5 lost) | Instructions clear? (1 confusing – 5 clear) | Hints opened |
 |---|---|---|---|---|---|
-| A | | | | | |
+| A | done | at least 2.5 h | | | |
 | B | | | | | |
 | C | | | | | |
 
