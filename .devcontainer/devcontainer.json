@@ -32,6 +32,21 @@
 
   "customizations": {
     "vscode": {
+      // Fewer round trips: format and fix on save, type errors shown as you type, tests in the sidebar
+      "settings": {
+        "editor.formatOnSave": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.codeActionsOnSave": { "source.fixAll.ruff": "explicit", "source.organizeImports.ruff": "explicit" }
+        },
+        "[typescript]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+        "[typescriptreact]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+        "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+        "mypy-type-checker.args": ["--strict"],
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["services"],
+        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python"
+      },
       "extensions": [
         "ms-python.python",
         "charliermarsh.ruff",

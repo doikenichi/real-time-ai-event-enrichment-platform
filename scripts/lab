@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+# lab: short commands for the daily loop, so your time goes to the challenge, not to typing.
+#
+#   lab start [NNN]       switch to work/day-NNN (create it from main if new) and start the timer
+#   lab pull              bring in the mentor's latest changes to your day branch (git pull --rebase)
+#   lab test a|b [filter] run the tests once (filter = part of a test name)
+#   lab watch a|b         re-run the tests on every save (stop with Ctrl+C)
+#   lab check a|b         auto-fix formatting and lint, then type-check
+#   lab save "message"    commit everything as "day-NNN: message"
+#   lab stop              stop the timer; the session time goes into the day's sessions.log
+#   lab finish            stop the timer, push, and open (or show) the PR into main
+#   lab time              show today's total time so far
+#   lab answer ID [NNN]   show an answer sheet (drill-a, a, drill-b, b, …), after asking if you've tried
+#
+# The timer writes start/stop lines to challenges/day-NNN/sessions.log (committed), so the
+# mentor sees your real time without you tracking anything. Forgot `lab stop`? The next
+# `lab start` closes the old session at its last commit.
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+die() { printf 'lab: %s\n' "$*" >&2; exit 1; }
+now() { date -u +%Y-%m-%dT%H:%M:%SZ; }
+
+day_from_branch() {
+  local branch
+  branch="$(git branch --show-current)"
+  [[ "$branch" =~ day-([0-9]{3}) ]] || die "not on a day branch (work/day-NNN); run: lab start NNN"
+  printf '%s' "${BASH_REMATCH[1]}"
+}
+
+log_file() { printf 'challenges/day-%s/sessions.log' "$1"; }
+
+session_open() { # prints the open start time, if the last line is a start
+  local file="$1"
+  [ -f "$file" ] || return 1
+  local last
+  last="$(tail -n 1 "$file")"
+  [[ "$last" == start* ]] && printf '%s' "${last#start }"
+}
+
+close_session() { # $1 = day, $2 = end time
+  local file start
+  file="$(log_file "$1")"
+  if start="$(session_open "$file")"; then
+    printf 'stop %s\n' "$2" >>"$file"
+    local mins=$(( ( $(date -u -d "$2" +%s) - $(date -u -d "$start" +%s) ) / 60 ))
+    printf 'Session: %d min.\n' "$mins"
+  fi
+}
+
+total_minutes() {
+  local file start total=0
+  file="$(log_file "$1")"
+  [ -f "$file" ] || { echo 0; return; }
+  while read -r kind when; do
+    if [ "$kind" = start ]; then start="$when"; fi
+    if [ "$kind" = stop ] && [ -n "${start:-}" ]; then
+      total=$(( total + ( $(date -u -d "$when" +%s) - $(date -u -d "$start" +%s) ) / 60 )); start=""
+    fi
+  done <"$file"
+  if [ -n "${start:-}" ]; then total=$(( total + ( $(date -u +%s) - $(date -u -d "$start" +%s) ) / 60 )); fi
+  echo "$total"
+}
+
+cmd_start() {
+  local day="${1:-}"
+  if [ -z "$day" ]; then day="$(day_from_branch)"; fi
+  day="$(printf '%03d' "$((10#$day))")"
+  local branch="work/day-$day"
+  if [ "$(git branch --show-current)" != "$branch" ]; then
+    git fetch --quiet origin
+    if git show-ref --quiet "refs/heads/$branch"; then
+      git switch --quiet "$branch"
+    elif git show-ref --quiet "refs/remotes/origin/$branch"; then
+      git switch --quiet --track "origin/$branch"
+    else
+      git switch --quiet main && git pull --quiet --rebase && git switch --quiet -c "$branch"
+    fi
+  fi
+  mkdir -p "challenges/day-$day"
+  local file; file="$(log_file "$day")"
+  if session_open "$file" >/dev/null; then # an unclosed session: end it at the last commit
+    close_session "$day" "$(git log -1 --format=%cI | xargs -I{} date -u -d {} +%Y-%m-%dT%H:%M:%SZ)" >/dev/null
+  fi
+  printf 'start %s\n' "$(now)" >>"$file"
+  printf 'On %s. Timer started. Today so far: %s min.\n' "$branch" "$(total_minutes "$day")"
+}
+
+cmd_pull() { git pull --rebase --autostash; }
+
+cmd_test() {
+  case "${1:-}" in
+    a) uv run --package ingest-api pytest services/ingest-api -q ${2:+-k "$2"} ;;
+    b) pnpm --dir web/dashboard exec vitest --run ${2:+"$2"} ;;
+    *) die "usage: lab test a|b [filter]" ;;
+  esac
+}
+
+cmd_watch() {
+  case "${1:-}" in
+    a) uv run --package ingest-api --with pytest-watcher ptw services/ingest-api -- -q ;;
+    b) pnpm --dir web/dashboard exec vitest ;;
+    *) die "usage: lab watch a|b" ;;
+  esac
+}
+
+cmd_check() {
+  case "${1:-}" in
+    a)
+      uv run ruff format services/ingest-api
+      uv run ruff check --fix services/ingest-api
+      uv run mypy --strict services/ingest-api/src
+      ;;
+    b)
+      pnpm --dir web/dashboard exec tsc --noEmit
+      pnpm --dir web/dashboard lint
+      ;;
+    *) die "usage: lab check a|b" ;;
+  esac
+}
+
+cmd_save() {
+  [ -n "${1:-}" ] || die 'usage: lab save "what now works"'
+  local day; day="$(day_from_branch)"
+  git add -A
+  git commit --quiet -m "day-$day: $1"
+  git log -1 --format='Saved %h: %s'
+}
+
+cmd_stop() {
+  local day; day="$(day_from_branch)"
+  close_session "$day" "$(now)" || true
+  git add "$(log_file "$day")" 2>/dev/null && git commit --quiet -m "day-$day: session log" -- "$(log_file "$day")" 2>/dev/null || true
+  printf 'Today so far: %s min.\n' "$(total_minutes "$day")"
+}
+
+cmd_finish() {
+  cmd_stop
+  git push --quiet -u origin "$(git branch --show-current)"
+  gh pr view --json url --jq .url 2>/dev/null || gh pr create --fill --base main
+}
+
+cmd_answer() {
+  local id="${1:-}" day="${2:-}"
+  [ -n "$id" ] || die "usage: lab answer drill-a|a|drill-b|b|drill-c|c [NNN]"
+  if [ -z "$day" ]; then day="$(day_from_branch)"; fi
+  day="$(printf '%03d' "$((10#$day))")"
+  # Answers live on their own branch, never in your working tree, so you can't see them by accident.
+  git fetch --quiet origin answers 2>/dev/null || die "no answers branch on origin yet"
+  local path="answers/day-$day/$id.md"
+  git cat-file -e "FETCH_HEAD:$path" 2>/dev/null || die "no answer sheet $path yet"
+  if [ -t 0 ]; then
+    read -r -p "Have you tried $id yourself first? [y/N] " reply
+    [[ "$reply" =~ ^[Yy] ]] || { echo "Good call. Try it, open a hint, or ask the AI tutor first."; return 0; }
+  fi
+  printf '%s %s %s\n' "answer" "$(now)" "$id" >>"$(log_file "$day")" 2>/dev/null || true
+  git show "FETCH_HEAD:$path" | ${PAGER:-less -R}
+}
+
+cmd_time() { printf 'Today so far: %s min.\n' "$(total_minutes "$(day_from_branch)")"; }
+
+case "${1:-help}" in
+  start) shift; cmd_start "$@" ;;
+  pull) cmd_pull ;;
+  test) shift; cmd_test "$@" ;;
+  watch) shift; cmd_watch "$@" ;;
+  check) shift; cmd_check "$@" ;;
+  save) shift; cmd_save "$@" ;;
+  stop) cmd_stop ;;
+  finish) cmd_finish ;;
+  time) cmd_time ;;
+  answer) shift; cmd_answer "$@" ;;
+  *) awk 'NR > 1 && /^#/ { sub(/^# ?/, ""); print; next } NR > 1 { exit }' "$0" ;;
+esac

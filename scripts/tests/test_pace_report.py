@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from pace_report import LEAD_IN_MIN, Commit, challenge_of, report, sessions  # noqa: E402
+from pace_report import LEAD_IN_MIN, Commit, challenge_of, cycle_minutes, logged_minutes, report, sessions  # noqa: E402
 
 T0 = datetime(2026, 11, 28, 5, 0, tzinfo=UTC)
 
@@ -39,6 +39,14 @@ class PaceReportTests(unittest.TestCase):
     def test_messages_without_the_day_prefix_are_reported(self) -> None:
         data = report([commit(0, "docs/adr/x.md", message="added doc")], day_prefix="day-001:")
         self.assertEqual(data["friction"]["messages_without_day_prefix"], ["added doc"])
+
+    def test_the_timer_log_adds_up_closed_sessions(self) -> None:
+        log = "start 2026-11-28T05:00:00Z\nstop 2026-11-28T05:40:00Z\nstart 2026-11-28T06:00:00Z\nstop 2026-11-28T06:20:00Z\n"
+        self.assertEqual(logged_minutes(log), 60.0)
+
+    def test_cycle_time_is_the_median_gap_within_sessions(self) -> None:
+        commits = [commit(0, "a"), commit(10, "b"), commit(40, "c"), commit(300, "d")]
+        self.assertEqual(cycle_minutes(commits), 20.0)
 
 
 if __name__ == "__main__":

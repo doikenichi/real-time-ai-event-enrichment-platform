@@ -63,6 +63,14 @@ Aim for about 2 minutes spoken. Use STAR (Situation, Task, Action, Result) for b
 
 ---
 
+## Practice answers
+Write your drill answers here, newest first. The mentor reviews them in the next day's `REVIEW.md`.
+
+### Day 001 (QA/SDET): test strategy for a brand-new microservice with no tests
+> *Your answer here.*
+
+---
+
 ## Question bank (the mentor adds to it)
 
 ### Asked in both
@@ -73,6 +81,7 @@ Aim for about 2 minutes spoken. Use STAR (Situation, Task, Action, Result) for b
 - How do you secure a CI/CD pipeline and the software supply chain?
 
 ### QA / SDET focus
+- You join a team that has a brand-new microservice with no tests. How do you build its test strategy, and what do you automate first? *(Day 001)*
 - How do you build a test strategy for a new microservice? What goes in each layer of the pyramid, and why?
 - How would you design a test automation framework for REST APIs plus Kafka events?
 - How do you deal with flaky tests? Which root causes have you found?

@@ -1,6 +1,6 @@
 {
   "source": "https://github.com/doikenichi/spec-driven-tdd-agent-skills",
-  "commit": "63dc3aa372828ca5dc6cb0d3e0ff5195a666603c",
+  "commit": "c1d4d5164900c8b4ce72f0702d761bf62a341ee6",
   "installed_to": [
     ".claude/skills",
     ".agents/skills"

@@ -16,6 +16,9 @@ FEEDBACK.md always wins when the two disagree):
   first commit
 - minutes and commits per challenge, from the paths each commit touches
 - TDD signals: test-only commits (red steps), code commits without tests
+- the timer: if `scripts/lab` wrote challenges/day-NNN/sessions.log, its total minutes
+  (the most accurate number, after the learner's own FEEDBACK.md)
+- cycle time: the median minutes between commits in a session; it falls as TDD gets routine
 - friction signals: learner edits to challenge files (often a fix to unclear or wrong
   instructions), commits fixing lint or types, commit messages without the day prefix
 """
@@ -23,6 +26,8 @@ FEEDBACK.md always wins when the two disagree):
 from __future__ import annotations
 
 import argparse
+import statistics
+from pathlib import Path
 import json
 import re
 import subprocess
@@ -140,6 +145,7 @@ def report(commits: list[Commit], day_prefix: str | None = None) -> dict[str, ob
             for g in groups
         ],
         "active_minutes": round(active, 1),
+        "median_minutes_between_commits": cycle_minutes(learner),
         "minutes_by_challenge": minutes_by_challenge(learner),
         "commits_by_challenge": per_challenge,
         "tdd": {
@@ -152,6 +158,32 @@ def report(commits: list[Commit], day_prefix: str | None = None) -> dict[str, ob
             "messages_without_day_prefix": no_prefix,
         },
     }
+
+
+def logged_minutes(log_text: str) -> float:
+    """Total minutes from a sessions.log written by `scripts/lab` (start/stop lines)."""
+    total, start = 0.0, None
+    for line in log_text.splitlines():
+        kind, _, when = line.partition(" ")
+        if not when:
+            continue
+        moment = datetime.fromisoformat(when.replace("Z", "+00:00"))
+        if kind == "start":
+            start = moment
+        elif kind == "stop" and start is not None:
+            total += (moment - start).total_seconds() / 60
+            start = None
+    return round(total, 1)
+
+
+def cycle_minutes(commits: list[Commit]) -> float | None:
+    """Median minutes between consecutive learner commits in the same session (red, green, refactor...)."""
+    gaps = [
+        (b.when - a.when).total_seconds() / 60
+        for group in sessions(commits)
+        for a, b in zip(group, group[1:])
+    ]
+    return round(statistics.median(gaps), 1) if gaps else None
 
 
 def gh_json(path: str) -> object:
@@ -199,6 +231,11 @@ def main(argv: list[str]) -> int:
         since = datetime.fromisoformat(args.since)
         commits = [c for c in commits if c.when >= since]
     data = report(commits, f"{args.day}:" if args.day else None)
+    if args.day:
+        log = Path(f"challenges/{args.day}/sessions.log")
+        if log.exists():
+            data["timer_minutes"] = logged_minutes(log.read_text())
+            data["answer_sheets_opened"] = [line.split(" ", 2)[2] for line in log.read_text().splitlines() if line.startswith("answer ")]
     print(json.dumps(data, indent=2, ensure_ascii=False) if args.json else to_markdown(data))
     return 0
 

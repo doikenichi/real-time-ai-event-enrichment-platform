@@ -1,16 +1,57 @@
 {
   "schema_version": 1,
-  "current_day": 0,
-  "next_day": 1,
+  "current_day": 1,
+  "next_day": 2,
   "phase": 0,
-  "milestone": "Monorepo tooling",
+  "milestone": "Phase 0 — Foundations: repo security baseline, spec-driven setup, monorepo tooling, ingest-api, dashboard",
   "timezone": "America/Edmonton",
-  "last_reviewed_commit": null,
-  "days": [],
+  "last_reviewed_commit": "364241eb147b67ba879f6f9ecb72537140314a25",
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-11-26",
+      "theme": "Foundations: health probes, first component, protected main",
+      "challenges": [
+        {
+          "id": "A",
+          "track": "backend",
+          "title": "ingest-api liveness and readiness probes (uv workspace, TDD)",
+          "openspec_change": "add-service-health-probes",
+          "minutes": 20,
+          "status": "assigned"
+        },
+        {
+          "id": "B",
+          "track": "full stack",
+          "title": "Next.js dashboard and an accessible ServiceStatus component (Vitest)",
+          "openspec_change": "add-dashboard-service-status",
+          "minutes": 20,
+          "status": "assigned"
+        },
+        {
+          "id": "C",
+          "track": "cloud-devops-ai",
+          "title": "Repository security baseline, verified by scripts/check-repo-baseline.sh",
+          "openspec_change": "add-repository-security-baseline",
+          "minutes": 15,
+          "status": "assigned"
+        }
+      ],
+      "interview_drill": {
+        "angle": "QA/SDET",
+        "question": "You join a team that has a brand-new microservice with no tests. How do you build its test strategy, and what do you automate first?"
+      }
+    }
+  ],
   "carry_over": [],
-  "skills_to_reinforce": [],
+  "skills_to_reinforce": [
+    "spec-first scenarios",
+    "red-green-refactor commits",
+    "liveness vs readiness",
+    "accessible queries by role"
+  ],
   "accounts_needed": {
-    "circleci": "needed in Phase 0 (sign in with GitHub, enable this repo)",
+    "circleci": "needed soon in Phase 0 (sign in with GitHub, enable this repo)",
     "vercel": "Phase 7",
     "aiven": "Phase 7",
     "render_or_koyeb": "Phase 7",

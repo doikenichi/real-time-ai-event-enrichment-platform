@@ -20,8 +20,8 @@
       "reported": {
         "A": {
           "status": "done",
-          "minutes": null,
-          "note": "way more than 1 hour (learner, 2026-11-28)"
+          "minutes": 150,
+          "note": "at least 2.5 hours (learner, 2026-11-28)"
         },
         "B": {
           "status": "not started"
@@ -39,7 +39,11 @@
         "note": "scripts/pace_report.py --pr 4 --pr 13 --since 2026-11-27T03:20:00+00:00; commits undercount reading and setup"
       },
       "pace_factor": {
-        "A": "over 3 (A alone took 60+ min vs a 20 min estimate); confirm with FEEDBACK.md"
+        "A": {
+          "vs_estimate_20_min": 7.5,
+          "vs_guide_estimate_50_min": 3.0,
+          "note": "at least; planning uses 3.0 against the guide estimate"
+        }
       },
       "instruction_errors": [
         "guide-a used `pytest -k livez`, which matches no test; the learner fixed it to `-k liveness`"
