@@ -15,6 +15,11 @@ Every challenge is written for the learner's current level on that track (`docs/
 
 The README line under each challenge title also says **Level: N** and **New concepts:** (at most two).
 
+Each challenge also has:
+- **Concepts practised:** concept cards in the README, pairing simple words with the industry terms used in job postings and interviews, with links to official docs for further learning (format in the skill `learning-instructor`)
+- **a practice drill**, `drill-<a|b|c>.md`: a 5–15 minute warm-up on a different, smaller problem with the same concepts, done in a git-ignored `practice/` folder
+- **answer sheets** for the drill and the challenge, kept on the separate `answers` branch (`answers/day-NNN/`), so they can't be seen by accident. Read one on purpose with `lab answer <id>`.
+
 Each day folder also has an empty `FEEDBACK.md` (from `challenges/FEEDBACK-template.md`) for the learner's own report: minutes, difficulty, clarity, hints, and what was wrong in the instructions. The mentor reads it first in the next review, together with `scripts/pace_report.py` (see "Feedback and pace" in `docs/learning/README.md`). A day has up to 3 challenges: fewer when the learner's pace says 3 won't fit in 60 minutes.
 
 ## Format of `README.md`

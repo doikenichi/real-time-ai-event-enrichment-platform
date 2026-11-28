@@ -36,6 +36,20 @@ Each new concept is introduced once with a worked example, then practised until 
 
 Statuses: **new** (seen once) → **practising** → **routine** (used without hints twice). Day 001 introduced more concepts than the limit, because it bootstraps everything; the next days repeat these before adding new ones.
 
+## Drills, challenges and answer sheets
+Each challenge comes in three parts:
+1. **Concepts practised:** short cards with the idea in simple words, the industry term, related words you'll hear, and links to learn more.
+2. **A practice drill** (`challenges/day-NNN/drill-<x>.md`): the same ideas on a small, different problem, 5–15 minutes, in a git-ignored `practice/` folder. Do it first; the real challenge then feels familiar.
+3. **The challenge** itself, with its guide.
+
+**Answer sheets** exist for both the drill and the challenge, but they're on a separate `answers` branch, never in your working folder, so you can't see them by accident. When you've tried (or been stuck for 15 minutes), read one on purpose:
+```bash
+lab answer drill-b        # the drill's answer, for the current day
+lab answer b              # the challenge's answer
+lab answer a 001          # a specific day
+```
+It asks "have you tried?" first, and notes in your session log that you opened it, which counts as a hint in the review, not a failure.
+
 ## Feedback and pace
 Two sources tell the mentor how a day really went. The mentor uses them to size the next day.
 

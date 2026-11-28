@@ -2,7 +2,7 @@
 
 Phase 0 · Foundations · total time ≈ 55 min
 
-> **New to Python, TypeScript or TDD?** Start with the step-by-step guides: [`guide-a.md`](guide-a.md) for Challenge A, [`guide-b.md`](guide-b.md) for Challenge B (setup is scripted: `challenges/day-001/setup-b.sh`) and [`guide-c.md`](guide-c.md) for Challenge C. Use the `lab` helper for the daily loop (`lab start 001`, `lab watch b`, `lab save "…"`, `lab finish`); it also times your sessions, so you don't have to. They split each challenge into small steps, each teaching one idea with an example, and a check after every step. The instructions below are the compact version; you'll be able to work from compact instructions like these after a few weeks.
+> **New to Python, TypeScript or TDD?** Start with the step-by-step guides: [`guide-a.md`](guide-a.md) for Challenge A, [`guide-b.md`](guide-b.md) for Challenge B (setup is scripted: `challenges/day-001/setup-b.sh`) and [`guide-c.md`](guide-c.md) for Challenge C. **Before each challenge,** do its practice drill: [`drill-b.md`](drill-b.md) and [`drill-c.md`](drill-c.md). Answer sheets for drills and challenges are kept on a separate branch so you can't see them by accident; read one on purpose with `lab answer <id>` (for example `lab answer drill-b`). Use the `lab` helper for the daily loop (`lab start 001`, `lab watch b`, `lab save "…"`, `lab finish`); it also times your sessions, so you don't have to. They split each challenge into small steps, each teaching one idea with an example, and a check after every step. The instructions below are the compact version; you'll be able to work from compact instructions like these after a few weeks.
 
 The first day lays three foundations at once: a test-first Python service, a test-first React component, and a protected repository. Each challenge follows **spec → test → code → docs**.
 
@@ -34,6 +34,36 @@ Each challenge has a starter test. Copy it into place **after** scaffolding (A a
 * [FastAPI testing](https://fastapi.tiangolo.com/tutorial/testing/) (FastAPI 0.16x; pin the version you install)
 
 **Book reference:** DDIA (2nd ed.), ch. 2, on nonfunctional requirements. Reliability means tolerating faults rather than preventing every one. Separating liveness from readiness is a small fault-tolerance decision: a broken dependency removes the service from traffic instead of causing a restart storm.
+
+### Concepts practised
+
+#### Is it alive? Can it take work? (industry terms: **liveness and readiness probes**)
+- **In simple words:** two questions a platform asks your service over HTTP. "Alive" means the process runs; "ready" means its dependencies answer, so it can take traffic.
+- **Why it matters here:** Kubernetes restarts a service that isn't alive, and stops sending traffic to one that isn't ready. Mixing them up causes restart storms.
+- **Words you'll hear:** *health check*, *startup probe* (a third probe for slow starts), *graceful degradation*.
+- **Learn more:** [Kubernetes: liveness, readiness and startup probes](https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/)
+- **Status:** new
+
+#### Hand the service its helpers (industry terms: **dependency injection**, **app factory**, **ports and adapters**)
+- **In simple words:** instead of the service creating its own Kafka or database checks, whoever builds it passes them in. Tests pass fakes; production passes real ones.
+- **Why it matters here:** every service in this platform is tested with fakes first, so tests are fast and need no Kafka.
+- **Words you'll hear:** *test double* / *fake*, *port* (the interface), *adapter* (a real implementation), *hexagonal architecture*.
+- **Learn more:** [FastAPI: testing](https://fastapi.tiangolo.com/tutorial/testing/) · [Architecture Patterns with Python, ch. 3 (free online)](https://www.cosmicpython.com/book/chapter_03_abstractions.html)
+- **Status:** new
+
+#### Wait for many things at once, but not forever (industry terms: **async I/O concurrency**, **timeouts**)
+- **In simple words:** start all the checks together and wait for all of them, like boiling three kettles at once; give up after a time limit.
+- **Why it matters here:** a hung dependency must never hang the probe, or the whole service looks dead.
+- **Words you'll hear:** *coroutine*, *event loop*, `asyncio.gather`, *structured concurrency* (`TaskGroup`), *time budget*.
+- **Learn more:** [Python docs: coroutines and tasks](https://docs.python.org/3/library/asyncio-task.html)
+- **Status:** new
+
+#### A standard error message (industry term: **problem details, RFC 9457**)
+- **In simple words:** a fixed JSON shape for HTTP errors, so every client can read them the same way.
+- **Why it matters here:** every API error in this platform uses it, without internal details.
+- **Words you'll hear:** *HTTP status code*, *media type* `application/problem+json`, *information disclosure*.
+- **Learn more:** [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) · [MDN: HTTP status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status)
+- **Status:** new
 
 **1. Spec (≈3 min):** read `openspec/changes/add-service-health-probes/`. Add the missing scenario: *a readiness check that hangs*. Decide the time budget (for example 1 s), and what the probe answers.
 
@@ -87,6 +117,29 @@ openspec validate add-service-health-probes --strict
 
 **Book reference:** AIE, ch. 10, "AI Engineering Architecture and User Feedback". The dashboard is where operators will later give feedback on enrichments. Starting with a clear, accessible status component is the first step of that interface.
 
+### Concepts practised
+
+#### A reusable piece of the page (industry terms: **React component**, **props**)
+- **In simple words:** a function that takes inputs (props) and returns what to show.
+- **Why it matters here:** the dashboard is built from small components, each tested on its own.
+- **Words you'll hear:** *JSX/TSX*, *render*, *composition*, *server and client components* (Next.js).
+- **Learn more:** [React: your first component](https://react.dev/learn/your-first-component) · [React: passing props](https://react.dev/learn/passing-props-to-a-component)
+- **Status:** new
+
+#### Only allowed values (industry terms: **union types**, **exhaustiveness**, `Record`)
+- **In simple words:** tell TypeScript the only values a state can have, and it makes you handle every one.
+- **Why it matters here:** a service state you forgot to handle becomes a compile error, not a blank screen.
+- **Words you'll hear:** *literal type*, *type narrowing*, *discriminated union*, *strict mode*.
+- **Learn more:** [TypeScript handbook: union types](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#union-types) · [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)
+- **Status:** new
+
+#### Test it the way people use it (industry terms: **accessible queries**, **ARIA role and accessible name**)
+- **In simple words:** find things on the page by what they are ("a status message called ingest-api"), like a screen reader would, not by CSS classes.
+- **Why it matters here:** the tests also prove the dashboard is accessible (WCAG), and they don't break when the styling changes.
+- **Words you'll hear:** `getByRole`, *jsdom*, *WCAG*, *live region* (`role="status"`).
+- **Learn more:** [Testing Library: which query to use](https://testing-library.com/docs/queries/about/#priority) · [MDN: the status role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/status_role)
+- **Status:** new
+
 **1. Spec (≈3 min):** read `openspec/changes/add-dashboard-service-status/`, and add the scenario for an **"unknown"** state (before the first readiness result arrives).
 
 **2. Red (≈6 min):**
@@ -132,6 +185,22 @@ openspec validate add-dashboard-service-status --strict
 * [OpenSSF Scorecard checks](https://github.com/ossf/scorecard/blob/main/docs/checks.md)
 
 **Book reference:** DDIA (2nd ed.), ch. 1, "Trade-Offs in Data Systems Architecture". Process and governance are part of the architecture. Today's trade-off is a little friction (PRs only) in exchange for traceability and safety.
+
+### Concepts practised
+
+#### Rules GitHub enforces for you (industry terms: **branch protection**, **rulesets**, **policy as code**)
+- **In simple words:** settings that stop anyone, including you, from pushing straight to `main` or rewriting its history.
+- **Why it matters here:** every change goes through a PR, where tests and reviews run. It's also a scored check in the OpenSSF Scorecard.
+- **Words you'll hear:** *linear history*, *force push*, *required status checks*, *four-eyes principle*.
+- **Learn more:** [GitHub: about rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
+- **Status:** new
+
+#### A safe way to report security problems (industry terms: **security policy**, **coordinated vulnerability disclosure**)
+- **In simple words:** tell people how to report a security bug privately, so it gets fixed before it's public.
+- **Why it matters here:** `SECURITY.md` plus private reporting is the minimum every public repo should have.
+- **Words you'll hear:** *CVE*, *security advisory*, *responsible disclosure*, *CODEOWNERS*.
+- **Learn more:** [GitHub: private vulnerability reporting](https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository) · [OpenSSF Scorecard checks](https://github.com/ossf/scorecard/blob/main/docs/checks.md)
+- **Status:** new
 
 **1. Spec (≈2 min):** read `openspec/changes/add-repository-security-baseline/`, and add a requirement for what every PR must confirm (your PR template's checklist).
 

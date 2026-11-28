@@ -54,3 +54,7 @@ data/footage/
 # Personal skill for the local, git-ignored books (not part of the shared skills)
 .agents/skills/book-library/
 .claude/skills/book-library
+
+# Practice drills (never shipped; see challenges/day-NNN/drill-*.md)
+practice/
+**/practice/

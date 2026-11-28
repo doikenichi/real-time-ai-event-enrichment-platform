@@ -10,6 +10,7 @@
 #   lab stop              stop the timer; the session time goes into the day's sessions.log
 #   lab finish            stop the timer, push, and open (or show) the PR into main
 #   lab time              show today's total time so far
+#   lab answer ID [NNN]   show an answer sheet (drill-a, a, drill-b, b, …), after asking if you've tried
 #
 # The timer writes start/stop lines to challenges/day-NNN/sessions.log (committed), so the
 # mentor sees your real time without you tracking anything. Forgot `lab stop`? The next
@@ -141,6 +142,23 @@ cmd_finish() {
   gh pr view --json url --jq .url 2>/dev/null || gh pr create --fill --base main
 }
 
+cmd_answer() {
+  local id="${1:-}" day="${2:-}"
+  [ -n "$id" ] || die "usage: lab answer drill-a|a|drill-b|b|drill-c|c [NNN]"
+  if [ -z "$day" ]; then day="$(day_from_branch)"; fi
+  day="$(printf '%03d' "$((10#$day))")"
+  # Answers live on their own branch, never in your working tree, so you can't see them by accident.
+  git fetch --quiet origin answers 2>/dev/null || die "no answers branch on origin yet"
+  local path="answers/day-$day/$id.md"
+  git cat-file -e "FETCH_HEAD:$path" 2>/dev/null || die "no answer sheet $path yet"
+  if [ -t 0 ]; then
+    read -r -p "Have you tried $id yourself first? [y/N] " reply
+    [[ "$reply" =~ ^[Yy] ]] || { echo "Good call. Try it, open a hint, or ask the AI tutor first."; return 0; }
+  fi
+  printf '%s %s %s\n' "answer" "$(now)" "$id" >>"$(log_file "$day")" 2>/dev/null || true
+  git show "FETCH_HEAD:$path" | ${PAGER:-less -R}
+}
+
 cmd_time() { printf 'Today so far: %s min.\n' "$(total_minutes "$(day_from_branch)")"; }
 
 case "${1:-help}" in
@@ -153,5 +171,6 @@ case "${1:-help}" in
   stop) cmd_stop ;;
   finish) cmd_finish ;;
   time) cmd_time ;;
-  *) sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//' ;;
+  answer) shift; cmd_answer "$@" ;;
+  *) awk 'NR > 1 && /^#/ { sub(/^# ?/, ""); print; next } NR > 1 { exit }' "$0" ;;
 esac

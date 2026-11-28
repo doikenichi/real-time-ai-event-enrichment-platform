@@ -235,6 +235,7 @@ def main(argv: list[str]) -> int:
         log = Path(f"challenges/{args.day}/sessions.log")
         if log.exists():
             data["timer_minutes"] = logged_minutes(log.read_text())
+            data["answer_sheets_opened"] = [line.split(" ", 2)[2] for line in log.read_text().splitlines() if line.startswith("answer ")]
     print(json.dumps(data, indent=2, ensure_ascii=False) if args.json else to_markdown(data))
     return 0
 
