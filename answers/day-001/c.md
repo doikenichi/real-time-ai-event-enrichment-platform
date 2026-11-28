@@ -5,7 +5,7 @@
 - **General → Pull Requests:** merge commits off, rebase merging on, squash optional (off keeps every TDD commit), "Automatically delete head branches" on.
 - **Advanced Security:** private vulnerability reporting on; secret scanning push protection on.
 
-As code (the stretch goal), `.github/rulesets/protect-main.json`:
+As code (drill C), `.github/rulesets/protect-main.json`, applied with one command instead of the ruleset screen:
 ```json
 {
   "name": "Protect main",

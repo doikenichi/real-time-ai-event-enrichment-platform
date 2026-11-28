@@ -1,48 +1,33 @@
-# Answer sheet: Day 001, drill B (`CoffeeStatus`)
+# Answer sheet: Day 001, drill B (the words for each service state)
 
-> Verified? Not run here (no Node test tools where this was written). Run `lab test b coffee` to confirm.
+> Verified? Not run here (no Node test tools where this was written). Run `lab test b service-state` to confirm.
 
 ## The answer
-`web/dashboard/practice/coffee-status.tsx`:
-```tsx
-type CoffeeStage = "brewing" | "ready";
+`web/dashboard/lib/service-state.ts`:
+```ts
+export type ServiceState = "ready" | "unavailable";
 
-const STAGE_WORDS: Record<CoffeeStage, string> = {
-  brewing: "Brewing…",
-  ready: "Ready",
+export const STATE_LABELS: Record<ServiceState, string> = {
+  ready: "Healthy",
+  unavailable: "Unavailable",
 };
-
-type CoffeeStatusProps = {
-  pot: string;
-  stage: CoffeeStage;
-};
-
-export function CoffeeStatus({ pot, stage }: CoffeeStatusProps) {
-  return (
-    <p role="status" aria-label={pot}>
-      {STAGE_WORDS[stage]}
-    </p>
-  );
-}
 ```
 
 ## Line by line
-- `type CoffeeStage = "brewing" | "ready"`: a **union of literal types**. Only these two strings are allowed.
-- `Record<CoffeeStage, string>`: an object that must have **one entry for every stage**. Add `"empty"` to the union and this line becomes a type error until you add its words (**exhaustiveness**).
-- `type CoffeeStatusProps`: the component's inputs. `{ pot, stage }: CoffeeStatusProps` **destructures** them.
-- `role="status"`: an ARIA **live region**: screen readers announce its content when it changes.
-- `aria-label={pot}`: gives the element its **accessible name**, which is what `getByRole("status", { name: "kitchen" })` matches.
-- `{STAGE_WORDS[stage]}`: looks up the words for the current stage.
+- `export type ServiceState = "ready" | "unavailable"`: a **union of literal types**: only these two strings are allowed. `export` lets the component (and the tests) use the same type.
+- `Record<ServiceState, string>`: an object that must have **one entry for every state**. Add `"unknown"` to the union and this line becomes a type error until you add its words (**exhaustiveness checking**).
+- The file has no React in it: it's plain data, so it's easy to test and to reuse (for example, in a notification later).
 
 ## Why this way
-- A `Record` lookup instead of `if`/`switch`: shorter, and the compiler checks every stage is covered. A `switch` with a `never` check does the same for logic that's more than a lookup.
-- `aria-label` instead of a visible name: fine for a drill. In a real UI, prefer a visible label linked with `aria-labelledby`, so sighted and screen-reader users see the same name.
+- **Separate the words from the component:** the component decides how things look; this file decides what they're called. That's **separation of concerns**, and it lets you change wording (or translate it, **i18n**) without touching the component.
+- A `Record` lookup instead of `if`/`switch`: shorter, and the compiler checks every state is covered. A `switch` with a `never` check does the same when there's more logic than a lookup.
+- `as const` objects plus `keyof typeof` are another common way to get the same type from the data. Starting from the union is clearer when the states come from a spec.
 
 ## Common mistakes
-- Using `string` for the stage: the tests still pass, but the compiler can't catch a typo like `"redy"`.
-- Putting the name in a `className` or `id`: `getByRole(..., { name })` ignores those.
-- Forgetting `export`: the test can't import the component.
+- Using `string` for the state: the tests still pass, but the compiler can't catch a typo like `"redy"`.
+- Forgetting `export` on the type: the test's `import { type ServiceState }` fails.
+- Words with different capitals from the test ("healthy"): `toBe` compares exactly.
 
 ## Check yourself
-1. What error do you get if `STAGE_WORDS` misses a stage, and where does it appear?
-2. Why does the test find the element by role and name instead of by CSS class?
+1. What error do you get if `STATE_LABELS` misses a state, and where does it appear?
+2. Why is this file easier to test than the component?

@@ -1,28 +1,52 @@
-# Answer sheet: Day 001, drill C (predict the checks)
+# Answer sheet: Day 001, drill C (the ruleset as code)
+
+> Verified: this file passes `bash challenges/day-001/check-drill-c.sh`.
 
 ## The answer
-| Check | Setting or file | API path | Fresh repo | Risk if missing |
-|---|---|---|---|---|
-| ruleset requires a pull request | ruleset rule `pull_request` | `repos/{repo}/rules/branches/main` | FAIL | changes skip review and CI |
-| ruleset blocks force pushes | ruleset rule `non_fast_forward` | same | FAIL | reviewed history can be rewritten or erased |
-| ruleset blocks deletion | ruleset rule `deletion` | same | FAIL | `main` can be deleted by mistake |
-| ruleset requires linear history | ruleset rule `required_linear_history` | same | FAIL | merge commits hide the red/green steps |
-| rebase merge is allowed | repo setting `allow_rebase_merge` | `repos/{repo}` | PASS (on by default) | TDD commits get squashed away |
-| merge commits are disabled | repo setting `allow_merge_commit` | `repos/{repo}` | FAIL (on by default) | non-linear history |
-| head branches are deleted after merge | `delete_branch_on_merge` | `repos/{repo}` | FAIL (off by default) | stale branches pile up |
-| private vulnerability reporting | security setting | `repos/{repo}/private-vulnerability-reporting` | FAIL | reporters open public issues, exposing the bug |
-| push protection | `security_and_analysis.secret_scanning_push_protection` | `repos/{repo}` | PASS (GitHub turns it on for public repos) | a pushed secret becomes public |
-| `SECURITY.md`, `CODEOWNERS`, PR template exist | files on `main` | `repos/{repo}/contents/<path>?ref=main` | FAIL | no reporting policy, no owner review, no checklist |
+`.github/rulesets/protect-main.json`:
+```json
+{
+  "name": "Protect main",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] } },
+  "rules": [
+    { "type": "deletion" },
+    { "type": "non_fast_forward" },
+    { "type": "required_linear_history" },
+    {
+      "type": "pull_request",
+      "parameters": {
+        "required_approving_review_count": 0,
+        "dismiss_stale_reviews_on_push": false,
+        "require_code_owner_review": false,
+        "require_last_push_approval": false,
+        "required_review_thread_resolution": true
+      }
+    }
+  ]
+}
+```
 
-On this repository today: **2 pass, 10 fail**, matching the table.
+## Line by line
+- `"target": "branch"`: the ruleset applies to branches (rulesets can also target tags).
+- `"enforcement": "active"`: enforced now. `"evaluate"` (on some plans) only reports what would be blocked; `"disabled"` turns it off.
+- `"~DEFAULT_BRANCH"`: a special value meaning "whatever the default branch is", so renaming `main` doesn't break the protection.
+- `deletion`: nobody can delete the branch.
+- `non_fast_forward`: blocks **force pushes** (pushes that rewrite history).
+- `required_linear_history`: no merge commits on `main`.
+- `pull_request`: changes only arrive through PRs. `required_review_thread_resolution: true` means every review comment must be resolved before merging. 0 approvals, because you can't approve your own PR when you're the only maintainer.
 
-## Why it matters
-Reading the check first is the same habit as reading a failing test first: you know exactly what "done" means before touching anything. The script is an **acceptance test for configuration**, and it can run in CI on a schedule to catch **configuration drift** (someone changing a setting by hand).
+## Why this way
+- **Policy as code:** the rules live in git next to the code, are reviewed in PRs, and can be re-applied to a new repo with one command. Clicking through settings leaves no record of why a rule exists.
+- **Rulesets** rather than classic branch protection: they layer (several rulesets can apply), can be exported and imported as JSON, and anyone with read access can see them.
+- Applying: `gh api repos/<owner>/<repo>/rulesets --method POST --input .github/rulesets/protect-main.json` creates it; `--method PUT` on `.../rulesets/<id>` updates it. Tools such as Terraform's GitHub provider or Probot settings do the same at scale.
 
 ## Common mistakes
-- Expecting the three file checks to pass after creating the files on your branch: they read `main`, so they pass only after the PR is merged.
-- Thinking "rebase allowed" means "merge commits disabled": they're separate settings.
+- `"include": ["main"]`: works, but `"refs/heads/main"` or `"~DEFAULT_BRANCH"` is the documented form; plain `main` may not match.
+- Leaving out the `pull_request` parameters: the API rejects the request; all five are required.
+- Running POST twice: you get two rulesets. Use PUT to update.
 
 ## Check yourself
-1. Why do the file checks use `?ref=main`?
-2. Which two checks are already green on a new public repo, and why?
+1. What's the difference between `non_fast_forward` and `required_linear_history`?
+2. Why is a JSON file in git better than clicking, even for a one-person repo?
