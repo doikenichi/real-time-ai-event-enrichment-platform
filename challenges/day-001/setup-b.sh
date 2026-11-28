@@ -32,11 +32,12 @@ export default defineConfig({
 });
 TS
 
-mkdir -p __tests__
+mkdir -p __tests__ lib
 cp ../../challenges/day-001/starter/web/dashboard/__tests__/service-status.test.tsx __tests__/
+cp ../../challenges/day-001/starter/web/dashboard/lib/service-state.test.ts lib/   # drill B
 
 cd ../..
 echo
-echo "Setup done. Now run:  lab test b"
+echo "Setup done. Start with drill B (challenges/day-001/drill-b.md), then run:  lab test b"
 echo "Expected: an error that '../components/service-status' can't be found (that's red)."
 echo 'Then commit it:       lab save "failing tests for service status"'

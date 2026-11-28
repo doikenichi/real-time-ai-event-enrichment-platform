@@ -4,7 +4,7 @@ Level 2 (supported): you know testing, so this guide gives the steps, a check af
 
 **Fast path**
 1. `scripts/check-repo-baseline.sh`: 10 red checks. That script is the test.
-2. GitHub settings: a ruleset for `main`, rebase merges only, private vulnerability reporting.
+2. Do drill C (the ruleset as JSON), apply it with `gh api`, then set rebase merges only and private vulnerability reporting.
 3. Add `SECURITY.md`, `.github/CODEOWNERS` and `.github/pull_request_template.md`.
 4. `lab finish`, then merge the PR with **Rebase and merge**.
 5. `scripts/check-repo-baseline.sh`: all green.
@@ -30,7 +30,14 @@ Level 2 (supported): you know testing, so this guide gives the steps, a check af
 ## Step 2: The ruleset (10 min)
 **Why:** a ruleset makes the rules about `main` enforced by GitHub, not just agreed.
 
-On github.com, in the repository: **Settings → Rules → Rulesets → New ruleset → New branch ruleset**.
+**Did drill C?** Apply your file instead of clicking (2 min):
+```bash
+gh api repos/doikenichi/real-time-ai-event-enrichment-platform/rulesets --method POST \
+  --input .github/rulesets/protect-main.json
+```
+Then check the ruleset appears under **Settings → Rules → Rulesets**, and skip to the **Check** below. (To change it later: `gh api .../rulesets` to find its `id`, then `--method PUT` on `.../rulesets/<id>`.)
+
+**Otherwise, by hand:** On github.com, in the repository: **Settings → Rules → Rulesets → New ruleset → New branch ruleset**.
 - **Name:** `Protect main`. **Enforcement status:** Active.
 - **Target branches:** Add target → **Include default branch**.
 - **Rules**, tick:

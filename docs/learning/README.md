@@ -39,7 +39,7 @@ Statuses: **new** (seen once) → **practising** → **routine** (used without h
 ## Drills, challenges and answer sheets
 Each challenge comes in three parts:
 1. **Concepts practised:** short cards with the idea in simple words, the industry term, related words you'll hear, and links to learn more.
-2. **A practice drill** (`challenges/day-NNN/drill-<x>.md`): the same ideas on a small, different problem, 5–15 minutes, in a git-ignored `practice/` folder. Do it first; the real challenge then feels familiar.
+2. **A practice drill** (`challenges/day-NNN/drill-<x>.md`): 5–15 minutes, the same ideas on a small, real piece of the product, such as the labels a component shows or a config file it applies. Do it first: the challenge reuses it, so the challenge gets shorter and the product moves forward.
 3. **The challenge** itself, with its guide.
 
 **Answer sheets** exist for both the drill and the challenge, but they're on a separate `answers` branch, never in your working folder, so you can't see them by accident. When you've tried (or been stuck for 15 minutes), read one on purpose:

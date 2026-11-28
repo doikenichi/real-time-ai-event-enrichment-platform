@@ -5,11 +5,11 @@ Same rules as `guide-a.md`: one idea per step, an example on something *differen
 Time: about 40–50 minutes the first time.
 
 **Fast path** (read the full steps only when you need them):
-1. `bash challenges/day-001/setup-b.sh`, then `lab watch b` in a second terminal: red.
+1. `bash challenges/day-001/setup-b.sh`, do drill B (`lib/service-state.ts`), then `lab watch b` in a second terminal: red.
 2. Create `components/service-status.tsx`, exporting `ServiceStatus({ name, state })`.
 3. Give it `role="status"` and `aria-label={name}`.
-4. Map each state to its words with a union type and a `Record`: green. `lab save` at each step.
-5. Add an `"unknown"` state test first (red), then the code (green); `lab check b`; `lab finish`.
+4. Show `STATE_LABELS[state]` from drill B: green. `lab save` at each step.
+5. Add an `"unknown"` state test first (red), then add it to `lib/service-state.ts` (green); `lab check b`; `lab finish`.
 
 ---
 
@@ -107,6 +107,8 @@ export function SizeTag({ size }: { size: Size }) {
   return <span>{SIZE_LABELS[size]}</span>;
 }
 ```
+
+**Did drill B?** Then the type and the labels already exist in `lib/service-state.ts`: import them (`import { STATE_LABELS, type ServiceState } from "@/lib/service-state";`), use `ServiceState` for the `state` prop and show `STATE_LABELS[state]`. Skip the three steps below.
 
 **Your turn:**
 1. Make a type `ServiceState` with the two states the tests use, `"ready"` and `"unavailable"`.
