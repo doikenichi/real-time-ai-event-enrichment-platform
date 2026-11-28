@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "note": "One entry per day. pace_factor = actual / estimated minutes, using reported minutes when given. Planning uses the average of the last 3 days.",
+  "days": [
+    {
+      "day": 1,
+      "prs": [
+        4,
+        13
+      ],
+      "estimated_minutes": {
+        "A": 20,
+        "B": 20,
+        "C": 15
+      },
+      "estimated_minutes_with_guide": {
+        "A": 50,
+        "B": 45
+      },
+      "reported": {
+        "A": {
+          "status": "done",
+          "minutes": null,
+          "note": "way more than 1 hour (learner, 2026-11-28)"
+        },
+        "B": {
+          "status": "not started"
+        },
+        "C": {
+          "status": "not started"
+        }
+      },
+      "measured": {
+        "active_minutes": 102.8,
+        "minutes_by_challenge": {
+          "A": 58.9,
+          "docs": 25.9
+        },
+        "note": "scripts/pace_report.py --pr 4 --pr 13 --since 2026-11-27T03:20:00+00:00; commits undercount reading and setup"
+      },
+      "pace_factor": {
+        "A": "over 3 (A alone took 60+ min vs a 20 min estimate); confirm with FEEDBACK.md"
+      },
+      "instruction_errors": [
+        "guide-a used `pytest -k livez`, which matches no test; the learner fixed it to `-k liveness`"
+      ]
+    }
+  ]
+}
