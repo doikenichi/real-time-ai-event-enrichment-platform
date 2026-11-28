@@ -2,6 +2,8 @@
 
 Phase 0 · Foundations · total time ≈ 55 min
 
+> **New to Python, TypeScript or TDD?** Start with the step-by-step guides: [`guide-a.md`](guide-a.md) for Challenge A and [`guide-b.md`](guide-b.md) for Challenge B. They split each challenge into small steps, each teaching one idea with an example, and a check after every step. The instructions below are the compact version; you'll be able to work from compact instructions like these after a few weeks.
+
 The first day lays three foundations at once: a test-first Python service, a test-first React component, and a protected repository. Each challenge follows **spec → test → code → docs**.
 
 ## Setup (≈5 min, once)
@@ -20,7 +22,7 @@ Each challenge has a starter test. Copy it into place **after** scaffolding (A a
 
 ---
 
-## A — Backend: health probes for `ingest-api` (≈20 min)
+## A — Backend: health probes for `ingest-api` (≈20 min; first time with the guide ≈50 min)
 
 1. **Goal:** a uv workspace with its first service, `ingest-api`, exposing liveness and readiness probes, built test-first.
 2. **Serves:** goals 1 (async Python, patterns), 3 (spec-driven, TDD), 4 (testing). Job: production-grade services, containers and Kubernetes.
@@ -72,7 +74,7 @@ openspec validate add-service-health-probes --strict
 
 ---
 
-## B — Full stack: the dashboard's first component (≈20 min)
+## B — Full stack: the dashboard's first component (≈20 min; first time with the guide ≈45 min)
 
 **Goal:** a Next.js dashboard in a pnpm workspace, with Vitest and Testing Library, and an accessible `ServiceStatus` component built test-first.
 **Serves:** goals 1 (TypeScript), 3 (TDD), 4 (testing), 7 (accessibility). Job: full stack, front end plus back end.
