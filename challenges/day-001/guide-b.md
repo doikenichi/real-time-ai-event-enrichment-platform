@@ -4,6 +4,13 @@ Same rules as `guide-a.md`: one idea per step, an example on something *differen
 
 Time: about 40–50 minutes the first time.
 
+**Fast path** (read the full steps only when you need them):
+1. `bash challenges/day-001/setup-b.sh`, then `lab watch b` in a second terminal: red.
+2. Create `components/service-status.tsx`, exporting `ServiceStatus({ name, state })`.
+3. Give it `role="status"` and `aria-label={name}`.
+4. Map each state to its words with a union type and a `Record`: green. `lab save` at each step.
+5. Add an `"unknown"` state test first (red), then the code (green); `lab check b`; `lab finish`.
+
 ---
 
 ## Step 0: What are we building? (3 min, reading)
@@ -25,42 +32,21 @@ Open `challenges/day-001/starter/web/dashboard/__tests__/service-status.test.tsx
 
 ---
 
-## Step 1: Create the dashboard and see red (10 min)
+## Step 1: Set up and see red (5 min)
 
-Run from the repo root:
+Setup isn't today's lesson, so it's a script. From the repo root:
 ```bash
-printf 'packages:\n  - "web/*"\n' > pnpm-workspace.yaml
-pnpm create next-app@latest web/dashboard --ts --app --eslint --use-pnpm --no-tailwind --no-src-dir --import-alias "@/*" --yes
-cd web/dashboard
-pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom vite-tsconfig-paths
-cp -r ../../challenges/day-001/starter/web/dashboard/__tests__ .
+lab start 001                       # if you aren't on work/day-001 with the timer running
+bash challenges/day-001/setup-b.sh
+lab test b
 ```
-- `pnpm-workspace.yaml` is the TypeScript side's workspace file: every folder in `web/` is a project.
-- `create next-app` generates a working Next.js app.
-- `pnpm add -D` adds **dev dependencies** (tools needed only to develop and test).
+The script creates the Next.js app in `web/dashboard`, adds Vitest and Testing Library, writes `vitest.config.mts` (a fake browser for the tests), and copies in the failing tests. Open `web/dashboard/vitest.config.mts` once: two settings, each with a comment.
 
-Create `web/dashboard/vitest.config.mts` with this content (it's setup, not part of the challenge, so here it is in full):
-```ts
-import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
-import { defineConfig } from "vitest/config";
-
-export default defineConfig({
-  plugins: [tsconfigPaths(), react()],
-  test: {
-    environment: "jsdom", // a fake browser, so components can render
-    globals: true,        // lets Testing Library clean up the page between tests
-  },
-});
-```
-In `web/dashboard/package.json`, inside `"scripts"`, add `"test": "vitest"`.
-
-```bash
-pnpm test --run
-```
 **Expected:** an error like `Failed to resolve import "../components/service-status"`. That's the right red: the component doesn't exist yet.
 
-**Commit:** `day-001: failing tests for service status`
+**Commit:** `lab save "failing tests for service status"`
+
+**Keep the tests running:** open a second terminal and run `lab watch b`. From now on, every save re-runs the tests, so you don't have to.
 
 ---
 
@@ -83,7 +69,7 @@ export function Greeting({ name }: GreetingProps) {
 
 **Your turn:** create `web/dashboard/components/service-status.tsx` that exports `ServiceStatus`, taking `name` and `state` props (both `string` for now) and showing them in a `<p>`.
 
-**Check:** `pnpm test --run`. **Expected:** the import works; both tests now fail because no element has the role `status`. A different red means progress.
+**Check:** watch the `lab watch b` terminal (or run `lab test b`). **Expected:** the import works; both tests now fail because no element has the role `status`. A different red means progress.
 
 ---
 
@@ -127,9 +113,9 @@ export function SizeTag({ size }: { size: Size }) {
 2. Map them to the labels the tests expect.
 3. Change the `state` prop from `string` to `ServiceState`, and show the label.
 
-**Check:** `pnpm test --run` → **2 passed**. Green!
+**Check:** `lab test b` → **2 passed**. Green!
 
-**Commit:** `day-001: service status shows healthy or unavailable`
+**Commit:** `lab save "service status shows healthy or unavailable"`
 
 ---
 
@@ -139,9 +125,9 @@ Before the first readiness answer arrives, the dashboard doesn't know the state.
 
 1. **Spec:** open `openspec/changes/add-dashboard-service-status/specs/dashboard-status/spec.md`. Copy the shape of an existing scenario, and add *"shows the state as unknown before the first result"*, with the exact words it shows (for example "Checking…" or "Unknown"). Run `openspec validate add-dashboard-service-status --strict`.
 2. **Red:** in the test file, copy one test and change it for `state="unknown"` and your words. Run it: it fails. TypeScript may also complain that `"unknown"` isn't a `ServiceState`. That's the compiler protecting you.
-3. **Commit:** `day-001: failing test for unknown service state`
+3. **Commit:** `lab save "failing test for unknown service state"`
 4. **Green:** add `"unknown"` to the union. `tsc` then tells you the `Record` is missing a label. Add it.
-5. **Check:** **3 passed**. **Commit:** `day-001: service status shows unknown`
+5. **Check:** **3 passed**. **Commit:** `lab save "service status shows unknown"`
 
 ---
 
@@ -153,13 +139,12 @@ Before the first readiness answer arrives, the dashboard doesn't know the state.
 
 | Command | What it checks |
 |---|---|
-| `pnpm test --run` | the tests |
-| `pnpm exec tsc --noEmit` | the types, without building anything |
-| `pnpm lint` | common mistakes and React rules |
+| `lab test b` | the tests |
+| `lab check b` | the types (`tsc --noEmit`) and lint (common mistakes and React rules) |
 
-**Commit:** `day-001: dashboard shows ingest-api status`
+**Commit:** `lab save "dashboard shows ingest-api status"`
 
-Then do the Docs step from the README (`web/dashboard/README.md`).
+Then do the Docs step from the README (`web/dashboard/README.md`), and `lab stop` (or `lab finish` to push and open the PR).
 
 ---
 

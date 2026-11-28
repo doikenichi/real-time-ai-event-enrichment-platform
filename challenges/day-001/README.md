@@ -2,7 +2,7 @@
 
 Phase 0 · Foundations · total time ≈ 55 min
 
-> **New to Python, TypeScript or TDD?** Start with the step-by-step guides: [`guide-a.md`](guide-a.md) for Challenge A and [`guide-b.md`](guide-b.md) for Challenge B. They split each challenge into small steps, each teaching one idea with an example, and a check after every step. The instructions below are the compact version; you'll be able to work from compact instructions like these after a few weeks.
+> **New to Python, TypeScript or TDD?** Start with the step-by-step guides: [`guide-a.md`](guide-a.md) for Challenge A, [`guide-b.md`](guide-b.md) for Challenge B (setup is scripted: `challenges/day-001/setup-b.sh`) and [`guide-c.md`](guide-c.md) for Challenge C. Use the `lab` helper for the daily loop (`lab start 001`, `lab watch b`, `lab save "…"`, `lab finish`); it also times your sessions, so you don't have to. They split each challenge into small steps, each teaching one idea with an example, and a check after every step. The instructions below are the compact version; you'll be able to work from compact instructions like these after a few weeks.
 
 The first day lays three foundations at once: a test-first Python service, a test-first React component, and a protected repository. Each challenge follows **spec → test → code → docs**.
 
