@@ -2,6 +2,14 @@
 # Runs once when the dev container is created. Idempotent: safe to run again.
 set -euo pipefail
 
+# The workspace mount is often owned by root on devcontainer and Codespaces hosts.
+# Trust the physical path, the logical path, and the whole /workspaces/* tree.
+workspace_dir="$(pwd -P)"
+for dir in "$workspace_dir" "$PWD" "/workspaces/*"; do
+  git config --global --get-all safe.directory | grep -Fxq "$dir" \
+    || git config --global --add safe.directory "$dir"
+done
+
 # Named volumes are created as root; give them to the dev user.
 sudo chown -R "$(id -u):$(id -g)" ~/.claude ~/.codex ~/.cache/uv ~/.local/share/pnpm 2>/dev/null || true
 
@@ -22,10 +30,25 @@ if [ -f pyproject.toml ]; then uv sync --all-packages; fi
 if [ -f pnpm-workspace.yaml ]; then pnpm install --frozen-lockfile; fi
 if [ -f .pre-commit-config.yaml ]; then uvx pre-commit install; fi
 
+# Set git email to the GitHub noreply address so commits never expose a private email.
+# Runs immediately if gh is already authenticated (e.g. on a container rebuild with a
+# persisted login volume); otherwise prints a one-liner to run after 'gh auth login'.
+if gh auth status &>/dev/null; then
+  noreply="$(gh api user --jq '"\(.id)+\(.login)@users.noreply.github.com"')"
+  git config --global user.email "$noreply"
+  echo "Git email set to $noreply"
+else
+  cat <<'HINT'
+After 'gh auth login', set your git email once with:
+  gh api user --jq '"\(.id)+\(.login)@users.noreply.github.com"' \
+    | xargs git config --global user.email
+HINT
+fi
+
 cat <<'MSG'
 
 Dev container ready. First time on this machine only:
-  gh auth login          # GitHub
+  gh auth login          # GitHub (then re-run the git email snippet above)
   claude                 # Claude Code: sign in with your Claude subscription
   codex login            # Codex: Sign in with ChatGPT (or: codex login --device-auth)
 Logins are kept in Docker volumes on this machine and survive rebuilds.
