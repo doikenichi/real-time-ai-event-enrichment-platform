@@ -32,7 +32,7 @@ The tests are already written for you in `services/ingest-api/tests/test_health.
 | Command | What it does |
 |---|---|
 | `uv run --package ingest-api pytest services/ingest-api -q` | runs all the tests |
-| `... -q -k livez` | runs only the tests whose name contains `livez` |
+| `... -q -k liveness` | runs only the tests whose name contains `liveness` |
 | `git add -A && git commit -m "day-001: <what now works>"` | saves a step |
 
 ---
@@ -121,7 +121,7 @@ def create_greeter(name: str) -> FastAPI:
 
 **Your turn:** add a `/livez` route that returns something small, like a status of "alive". Don't touch `readiness_checks` here: liveness must not check dependencies.
 
-**Check:** `uv run --package ingest-api pytest services/ingest-api -q -k livez` → **1 passed**. That's your first green.
+**Check:** `uv run --package ingest-api pytest services/ingest-api -q -k liveness` → **1 passed**. That's your first green.
 
 **Commit:** `day-001: liveness probe`
 
