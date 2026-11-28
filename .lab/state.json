@@ -19,5 +19,19 @@
   "notes": [
     "Learner can record real footage from own premises for real video analysis and extract frames (ffmpeg). Plan it with F19 (Phase 8): footage stays in git-ignored data/footage/, recorded detector/vision outputs in tests, privacy rules from ADR-0007.",
     "2026-11-27: added ADR-0009 (CTRF, Allure 3, ReportPortal, testing indicators in F17), ADR-0010 (Argo CD GitOps on the local cluster), ADR-0011 (dev container, mentor-provided). New tools go into .devcontainer in the phase that needs them."
-  ]
+  ],
+  "learner": {
+    "experience": {
+      "python": "beginner",
+      "typescript": "beginner",
+      "tdd": "beginner",
+      "testing": "intermediate (QA background)"
+    },
+    "levels": {
+      "A": 1,
+      "B": 1,
+      "C": 2
+    },
+    "notes": "Day 001 feedback (2026-11-27): the compact instructions were too dense for a first TDD project. Start every track guided (docs/learning/README.md) and fade the scaffolding as reviews show progress."
+  }
 }
