@@ -10,6 +10,9 @@ for dir in "$workspace_dir" "$PWD" "/workspaces/*"; do
     || git config --global --add safe.directory "$dir"
 done
 
+# The `lab` helper on the PATH (scripts/lab: start, test, watch, check, save, stop, finish)
+mkdir -p ~/.local/bin && ln -sf "$(pwd -P)/scripts/lab" ~/.local/bin/lab
+
 # Named volumes are created as root; give them to the dev user.
 sudo chown -R "$(id -u):$(id -g)" ~/.claude ~/.codex ~/.cache/uv ~/.local/share/pnpm 2>/dev/null || true
 

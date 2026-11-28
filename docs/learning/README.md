@@ -39,6 +39,8 @@ Statuses: **new** (seen once) → **practising** → **routine** (used without h
 ## Feedback and pace
 Two sources tell the mentor how a day really went. The mentor uses them to size the next day.
 
+**0. The timer (no effort).** `lab start` and `lab stop` (or `lab finish`) record your sessions in `challenges/day-NNN/sessions.log`. That's your real time, without tracking anything.
+
 **1. Your manual input (wins when the two disagree).** At the end of each session, copy `challenges/FEEDBACK-template.md` to `challenges/day-NNN/FEEDBACK.md` and fill it in: a rough time (a range or "at least" is fine), difficulty, clarity, hints, where you got stuck, and what was wrong in the instructions. Two minutes is enough. If you're short on time, write one PR comment starting with `feedback:` instead.
 
 **2. Metrics from your PRs.** In each review the mentor runs `python3 scripts/pace_report.py --pr <N> --day day-NNN` on the day's PRs. It measures:
@@ -55,6 +57,27 @@ Commits can't see reading, thinking or setup time, so they undercount. Day 001 i
 - a difficulty of 4–5 or a clarity of 1–2 on a challenge keeps that track's next challenge at the same size and level, with more examples
 - every instruction error you found is fixed in the guide format, and listed in the review
 - the factor is expected to fall over the weeks. When it reaches about 1.2, the day returns to 3 challenges.
+
+## Going faster
+Day 001's A took at least 2.5 hours against a 50-minute guided estimate. Most first-day time goes to things that aren't the lesson. Each fix below targets one of them, and the pace report shows whether it worked.
+
+| Time sink | Fix | Metric that shows it |
+|---|---|---|
+| Typing long commands, and typos in them | `scripts/lab` (on your PATH as `lab` in the dev container): `lab test a`, `lab watch a`, `lab check a`, `lab save "…"` | fewer friction commits |
+| Waiting for and re-running tests | `lab watch a` (or `b`) re-runs the tests on every save; keep it open in a second terminal | median minutes between commits |
+| Lint and type errors at the end | the dev container formats and fixes on save, and shows type errors as you type | lint or type fix commits |
+| Setup and boilerplate (workspace files, config, installs) | at levels 1–2 the mentor provides it, as a setup script or committed config; your time goes to the tests and the logic | minutes in commits that touch only config |
+| Being stuck without knowing it | the timer (`lab start` / `lab stop`) and a rule: open a hint after **10 minutes** stuck, ask the AI tutor after **20** | time per step vs the guide's estimate |
+| Reading too much | each guide starts with a 5-line **fast path**; read the full step only when the fast path isn't enough | |
+| Git and PR wrangling | one loop: `lab start NNN` → work → `lab save` at each red and green → `lab finish`. When the mentor updates your day, `lab pull` | PRs and force pushes per day |
+| Polishing | green is enough: make it pass, commit, then improve only if a refactor step asks | |
+
+**Ask the AI tutor** (Claude Code or Codex, inside the dev container):
+- "I'm on step N of guide-a. Explain the idea with a different example, don't give me the code."
+- "Here's my error: … What does it mean, and where should I look?"
+- "Review my change for step N against the guide. Point to problems, don't fix them."
+
+**Metrics to watch over the weeks** (from `scripts/pace_report.py` and the timer): the pace factor going down toward about 1.2, the median minutes between commits going down, fewer friction signals, and fewer hints opened per challenge.
 
 ## When you're stuck
 - Open hints one at a time.
