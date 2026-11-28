@@ -15,6 +15,8 @@ Every challenge is written for the learner's current level on that track (`docs/
 
 The README line under each challenge title also says **Level: N** and **New concepts:** (at most two).
 
+Each day folder also has an empty `FEEDBACK.md` (from `challenges/FEEDBACK-template.md`) for the learner's own report: minutes, difficulty, clarity, hints, and what was wrong in the instructions. The mentor reads it first in the next review, together with `scripts/pace_report.py` (see "Feedback and pace" in `docs/learning/README.md`). A day has up to 3 challenges: fewer when the learner's pace says 3 won't fit in 60 minutes.
+
 ## Format of `README.md`
 
 ```markdown
