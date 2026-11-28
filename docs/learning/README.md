@@ -39,7 +39,7 @@ Statuses: **new** (seen once) → **practising** → **routine** (used without h
 ## Feedback and pace
 Two sources tell the mentor how a day really went. The mentor uses them to size the next day.
 
-**1. Your manual input (wins when the two disagree).** At the end of each session, copy `challenges/FEEDBACK-template.md` to `challenges/day-NNN/FEEDBACK.md` and fill it in: minutes, difficulty, clarity, hints, where you got stuck, and what was wrong in the instructions. Two minutes is enough. If you're short on time, write one PR comment starting with `feedback:` instead.
+**1. Your manual input (wins when the two disagree).** At the end of each session, copy `challenges/FEEDBACK-template.md` to `challenges/day-NNN/FEEDBACK.md` and fill it in: a rough time (a range or "at least" is fine), difficulty, clarity, hints, where you got stuck, and what was wrong in the instructions. Two minutes is enough. If you're short on time, write one PR comment starting with `feedback:` instead.
 
 **2. Metrics from your PRs.** In each review the mentor runs `python3 scripts/pace_report.py --pr <N> --day day-NNN` on the day's PRs. It measures:
 - active minutes, from commit timestamps grouped into sessions (gaps over 45 minutes start a new session, and each session adds 15 minutes for the work before its first commit)
@@ -47,9 +47,9 @@ Two sources tell the mentor how a day really went. The mentor uses them to size 
 - TDD signals: test-only commits (red steps), and code commits without test changes
 - friction signals: your edits to challenge files (usually a fix to the instructions), lint and type fix commits, and messages without the `day-NNN:` prefix
 
-Commits can't see reading, thinking or setup time, so they undercount. Day 001 is the example: the commits show about 100 minutes for A, and you reported "way more than an hour".
+Commits can't see reading, thinking or setup time, so they undercount. Day 001 is the example: the commits show about 100 minutes for A, and you reported at least 2.5 hours.
 
-**3. Calibration.** The mentor keeps `.lab/pace.json`, one entry per day with the estimate, your reported minutes, the measured minutes and the ratio between them (**pace factor** = actual ÷ estimated, using your minutes when you gave them). For the next day:
+**3. Calibration.** The mentor keeps `.lab/pace.json`, one entry per day with the estimate, your reported minutes, the measured minutes and the ratio between them (**pace factor** = actual ÷ estimated, using your time when you gave it; for "at least N" use N, for a range use its middle). For the next day:
 - the plan uses the **average pace factor of the last 3 days**: a step estimated at 10 minutes for an expert is planned as 10 × factor
 - the day's total, at your pace, stays at or under **60 minutes**. When that doesn't fit 3 challenges, the day has fewer: one guided challenge, plus a small one if it fits. B and C wait their turn. They're carried over, not dropped.
 - a difficulty of 4–5 or a clarity of 1–2 on a challenge keeps that track's next challenge at the same size and level, with more examples
