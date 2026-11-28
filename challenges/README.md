@@ -7,6 +7,14 @@ Each weekday gets its own folder, `challenges/day-NNN/`:
 
 Every challenge follows **spec → test → code → docs**, matching the shared skills in `.claude/skills/` and `.agents/skills/`.
 
+## Scaffolding
+Every challenge is written for the learner's current level on that track (`docs/learning/README.md`). At levels 1 and 2, the README's compact challenge is paired with a step-by-step guide, `challenges/day-NNN/guide-<a|b|c>.md`, in the format of `challenges/day-001/guide-a.md`:
+- **Step N: <one idea> (≈N min):** why it matters, the idea in plain words, an example on a different problem, "Your turn", a **Check** (command and expected output), a **Commit**, and collapsed hints
+- a glossary of new terms, and short official links to learn more
+- at most two new concepts per challenge; the rest is practice of known concepts
+
+The README line under each challenge title also says **Level: N** and **New concepts:** (at most two).
+
 ## Format of `README.md`
 
 ```markdown
