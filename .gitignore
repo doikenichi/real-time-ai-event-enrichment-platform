@@ -50,3 +50,7 @@ data/footage/
 *.mkv
 *.mov
 *.avi
+
+# Personal skill for the local, git-ignored books (not part of the shared skills)
+.agents/skills/book-library/
+.claude/skills/book-library
