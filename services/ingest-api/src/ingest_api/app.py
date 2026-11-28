@@ -24,21 +24,7 @@ def create_app(readiness_checks: list[Callable[[], Awaitable[bool]]]) -> FastAPI
     @app.get("/readyz")
     async def readyz() -> JSONResponse:
         """Report whether all configured readiness checks pass."""
-
-        # Stop at the first failed check so unhealthy dependencies are reported promptly.
-        results = await asyncio.gather(*(task() for task in readiness_checks))
-        if all(results):
-            # All readiness checks passed.
-            return JSONResponse(
-                status_code=200,
-                media_type="application/problem+json",
-                content={
-                    "type": "about:blank",
-                    "title": "success",
-                    "status": 200,
-                },
-            )
-        return JSONResponse(
+        error_response = JSONResponse(
             status_code=503,
             media_type="application/problem+json",
             content={
@@ -47,5 +33,23 @@ def create_app(readiness_checks: list[Callable[[], Awaitable[bool]]]) -> FastAPI
                 "status": 503,
             },
         )
+        # Stop at the first failed check so unhealthy dependencies are reported promptly.
+        try:
+            async with asyncio.timeout(0.8):
+                results = await asyncio.gather(*(task() for task in readiness_checks))
+            if all(results):
+                # All readiness checks passed.
+                return JSONResponse(
+                    status_code=200,
+                    media_type="application/problem+json",
+                    content={
+                        "type": "about:blank",
+                        "title": "success",
+                        "status": 200,
+                    },
+                )
+            return error_response
+        except TimeoutError:
+            return error_response
 
     return app
