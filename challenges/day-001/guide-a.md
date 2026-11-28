@@ -194,7 +194,8 @@ import asyncio
 async def boil_kettle() -> bool: ...
 async def toast_bread() -> bool: ...
 
-results = await asyncio.gather(boil_kettle(), toast_bread())   # a list: [True, True]
+
+results = await asyncio.gather(boil_kettle(), toast_bread())  # a list: [True, True]
 ```
 - `asyncio.gather(a(), b())` runs both and waits until both are done. It returns their results in a list, in order.
 - With a list of functions, build the calls with a **generator** and *unpack* it with `*`: `asyncio.gather(*(task() for task in tasks))`.
@@ -223,7 +224,7 @@ import time
 
 
 async def hangs() -> bool:
-    await asyncio.sleep(10)   # pretends to be a dependency that never answers
+    await asyncio.sleep(10)  # pretends to be a dependency that never answers
     return True
 
 

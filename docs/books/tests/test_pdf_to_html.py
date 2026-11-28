@@ -5,13 +5,16 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from typing import ClassVar, Self
 from unittest.mock import patch
 
 from pdf_to_html import convert_tree, discover_pdfs, render_pdf_to_html
 
 
 class FakePage:
-    def __init__(self, number: int, content: str, links: list[dict[str, object]]) -> None:
+    def __init__(
+        self, number: int, content: str, links: list[dict[str, object]]
+    ) -> None:
         self.number = number
         self.content = content
         self.links = links
@@ -28,12 +31,12 @@ class FakePage:
 
 
 class FakeDocument:
-    metadata = {"title": "Native & Ebook"}
+    metadata: ClassVar[dict[str, str]] = {"title": "Native & Ebook"}
 
     def __init__(self, pages: list[FakePage]) -> None:
         self.pages = pages
 
-    def __enter__(self) -> FakeDocument:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *_: object) -> None:
@@ -88,7 +91,10 @@ class ConvertTreeTests(unittest.TestCase):
             summary = convert_tree(root, renderer=lambda path: f"<p>{path.name}</p>")
 
             self.assertEqual(source.read_bytes(), b"original-pdf")
-            self.assertEqual(source.with_suffix(".html").read_text(encoding="utf-8"), "<p>guide.pdf</p>")
+            self.assertEqual(
+                source.with_suffix(".html").read_text(encoding="utf-8"),
+                "<p>guide.pdf</p>",
+            )
             self.assertEqual(summary.converted, 1)
             self.assertEqual(summary.skipped, 0)
             self.assertEqual(summary.failed, ())
@@ -137,13 +143,17 @@ class ConvertTreeTests(unittest.TestCase):
             summary = convert_tree(root, renderer=renderer)
 
             self.assertFalse(bad.with_suffix(".html").exists())
-            self.assertEqual(good.with_suffix(".html").read_text(encoding="utf-8"), "converted")
+            self.assertEqual(
+                good.with_suffix(".html").read_text(encoding="utf-8"), "converted"
+            )
             self.assertEqual(summary.converted, 1)
             self.assertEqual(summary.failed, ((bad, "damaged PDF"),))
 
 
 class EbookRenderingTests(unittest.TestCase):
-    def test_pdf_becomes_a_reflowable_article_with_toc_and_page_navigation(self) -> None:
+    def test_pdf_becomes_a_reflowable_article_with_toc_and_page_navigation(
+        self,
+    ) -> None:
         pages = [
             FakePage(0, "Introduction text", []),
             FakePage(1, "Details text", []),

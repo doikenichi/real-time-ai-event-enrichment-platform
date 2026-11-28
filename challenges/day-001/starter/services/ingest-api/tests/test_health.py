@@ -9,7 +9,6 @@ from collections.abc import Awaitable, Callable
 
 import httpx
 import pytest
-
 from ingest_api.app import create_app
 
 # A readiness check is any async callable that returns True (ready) or False (not ready).
@@ -26,7 +25,9 @@ async def not_ready() -> bool:
 
 def client_for(*checks: ReadinessCheck) -> httpx.AsyncClient:
     app = create_app(readiness_checks=list(checks))
-    return httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test")
+    return httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://test"
+    )
 
 
 @pytest.mark.asyncio

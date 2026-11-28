@@ -14,7 +14,6 @@ from typing import Any
 from urllib.parse import urlsplit
 from xml.etree import ElementTree
 
-
 HtmlRenderer = Callable[[Path], str]
 
 
@@ -75,9 +74,7 @@ def _toc_html(entries: list[list[Any]], page_count: int) -> str:
         return ""
     return (
         '<nav class="toc" aria-labelledby="toc-heading">'
-        '<h2 id="toc-heading">Contents</h2><ol>'
-        + "".join(items)
-        + "</ol></nav>"
+        '<h2 id="toc-heading">Contents</h2><ol>' + "".join(items) + "</ol></nav>"
     )
 
 
@@ -129,7 +126,7 @@ def _link_references_html(
                 continue
             seen.add((source_index, target))
             references.append(
-                f'<li><span>Page {source_index}:</span> '
+                f"<li><span>Page {source_index}:</span> "
                 f'<a href="{html.escape(target, quote=True)}">'
                 f"{html.escape(label)}</a></li>"
             )
@@ -268,10 +265,12 @@ def convert_tree(
         except FileExistsError:
             # Another process created the output after the existence check.
             skipped += 1
-        except Exception as error:  # Keep converting independent documents.
+        except Exception as error:  # noqa: BLE001  # Keep converting independent documents.
             failures.append((pdf_path, str(error)))
 
-    return ConversionSummary(converted=converted, skipped=skipped, failed=tuple(failures))
+    return ConversionSummary(
+        converted=converted, skipped=skipped, failed=tuple(failures)
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -314,4 +313,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
