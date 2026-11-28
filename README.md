@@ -36,7 +36,7 @@ Every weekday at about 17:40 (America/Edmonton), a mentor agent:
 2. Writes `challenges/day-NNN/REVIEW.md` for the previous day: feedback on your code, and a reference solution for anything left unfinished.
 3. Opens a pull request named `lab/day-NNN`, with `challenges/day-NNN/README.md` describing **3 challenges** (10–20 min each, at most 60 min in total) and any failing tests or stubs you need.
 
-**Your loop:** merge the day's PR, `git pull`, solve the challenges, make the tests pass, and commit with `day-NNN: <what you did>`. Push before about 17:30 the next weekday. If a day isn't finished, the next run adapts to it instead of moving on.
+**Your loop:** merge the day's PR and `git pull`. Then `git switch -c work/day-NNN`, solve the challenges test-first, and commit at each green step with `day-NNN: <what you did>`. Open a PR into `main` and **Rebase and merge** it before about 17:30 the next weekday. `main` is protected, and rebase merges keep your TDD commits. If a day isn't finished, the next run adapts to it instead of moving on.
 
 See [ROADMAP.md](ROADMAP.md) for the curriculum, [docs/READING.md](docs/READING.md) for the reading plan, [docs/GOALS.md](docs/GOALS.md) for the goals and how they map to the target job, and [challenges/README.md](challenges/README.md) for the challenge format.
 
