@@ -1,6 +1,6 @@
 # Day 001 feedback
 
-Fill it in when you stop for the day (2 minutes). Rough numbers are fine. The mentor reads it before anything else, and it wins over the commit metrics when they disagree.
+Fill this in when you stop for the day (2 minutes). Rough numbers are fine. The mentor reads it before anything else, and it wins over the commit metrics when they disagree.
 
 | Challenge | Status (done / partial / not started) | Minutes (your estimate, including reading and setup) | Difficulty (1 easy – 5 lost) | Instructions clear? (1 confusing – 5 clear) | Hints opened |
 |---|---|---|---|---|---|
